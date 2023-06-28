@@ -1,17 +1,52 @@
 [
     {
-        "name": "Праздник трех королей",
-        "date": "2022-01-01",
+        "name": "Праздник Трех Королей (Dreikönigfest)",
+        "date": "2023-01-06",
         "link": "https://wpv.kz/the-feast-of-the-three-kings-(dreik%C3%B6nigfest).html"
     },
     {
-        "name": "Праздник двух королей",
-        "date": "2022-01-01",
-        "link": "https://wpv.kz/the-feast-of-the-three-kings-(dreik%C3%B6nigfest).html"
+        "name": "Карнавал (Karneval/Fastnacht)",
+        "date": "2023-02-11",
+        "link": "https://wpv.kz/carnival-(karneval-fastnacht).html"
     },
     {
-        "name": "Праздник Четырех королей",
-        "date": "2022-03-01",
-        "link": "https://wpv.kz/the-feast-of-the-three-kings-(dreik%C3%B6nigfest).html"
+        "name": "Вербное воскресение (Palmsonntag)",
+        "date": "2023-03-24",
+        "link": "https://wpv.kz/palm-sunday-(palmsonntag).html"
+    },
+    {
+        "name": "Пасха (Ostern)",
+        "date": "2023-03-31",
+        "link": "https://wpv.kz/easter-(ostern).html"
+    },
+    {
+        "name": "Праздник урожая (Erntedankfest)",
+        "date": "2023-10-07",
+        "link": "https://wpv.kz/harvest-festival-(erntedankfest).html"
+    },
+    {
+        "name": "Октоберфест (Oktoberfest)",
+        "date": "2023-10-10",
+        "link": "https://wpv.kz/oktoberfest.html"
+    },
+    {
+        "name": "День Св. Мартина, покровителя бедняков и солдат",
+        "date": "2023-11-11",
+        "link": "https://wpv.kz/st.-martin's-day.html"
+    },
+    {
+        "name": "День Св. Николая",
+        "date": "2023-12-06",
+        "link": "https://wpv.kz/st.-nicholas'-day.html"
+    },
+    {
+        "name": "Первый Адвент (Erster Advent)",
+        "date": "2023-12-01",
+        "link": "https://wpv.kz/first-advent-(erster-advent).html"
+    },
+    {
+        "name": "Рождество (Weihnachten)",
+        "date": "2023-12-24",
+        "link": "https://wpv.kz/christmas-(weihnachten).html"
     }
 ]
