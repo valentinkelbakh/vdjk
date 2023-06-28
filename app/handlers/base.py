@@ -1,4 +1,4 @@
-import logging
+import logging, json, os
 
 from aiogram import types
 from aiogram.dispatcher import FSMContext
@@ -14,6 +14,7 @@ import urllib3.exceptions
 from aiogram.utils import exceptions
 
 from app.data.states import Menu
+from app import keyboards as kb
 
 @dp.message_handler(state='*', commands='cancel')
 @dp.message_handler(Text(equals='cancel', ignore_case=True), state='*')
@@ -62,6 +63,10 @@ async def general_error_handler(update: types.Update, exception: Exception):
             logging.error(f'\nTraceback ends⭕')
             return None
 
+@dp.callback_query_handler(base_cb.filter(option=Menu.Main))
+
+
+
 
 @dp.message_handler(commands='start', state='*')
 async def cmd_start(message: types.Message, state: FSMContext):
@@ -70,37 +75,40 @@ async def cmd_start(message: types.Message, state: FSMContext):
     """
     await state.finish()
     user_id = message.from_id
-    keyboard = InlineKeyboardMarkup()
-    keyboard.add(InlineKeyboardButton(text='Немецкие праздники', 
-                                      callback_data=base_cb.new(option=Menu.OptionA, page=1)))
-    keyboard.add(InlineKeyboardButton(text='Ближайший праздник', 
-                                      callback_data=base_cb.new(option=Menu.OptionA, page=1)))
+    
 
-    return await message.answer("Тест", reply_markup=keyboard)
+    return await message.answer("Тест", reply_markup=kb.base.main_menu)
 
-@dp.callback_query_handler(base_cb.filter(option=Menu.OptionA))
-async def handleOptionA(callback_query: types.CallbackQuery, state: FSMContext):
-    sample_data = [{
-        'name': 'Праздник трех королей',
-        'date': '2022-01-01',
-        'link': 'https://wpv.kz/the-feast-of-the-three-kings-(dreik%C3%B6nigfest).html'
-    },
-    {
-        'name': 'Праздник двух королей',
-        'date': '2022-01-01',
-        'link': 'https://wpv.kz/the-feast-of-the-three-kings-(dreik%C3%B6nigfest).html'
-    },
-    {
-        'name': 'Праздник Четырех королей',
-        'date': '2022-03-01',
-        'link': 'https://wpv.kz/the-feast-of-the-three-kings-(dreik%C3%B6nigfest).html'
-    }]
-    def get_n_items(data, n):
-        return data[:n]
+@dp.callback_query_handler(base_cb.filter(option=Menu.Holidays))
+async def handleOptionA(callback_query: types.CallbackQuery, callback_data: dict, state: FSMContext):    
+    # sample_data = [{
+    #     'name': 'Праздник трех королей',
+    #     'date': '2022-01-01',
+    #     'link': 'https://wpv.kz/the-feast-of-the-three-kings-(dreik%C3%B6nigfest).html'
+    # },
+    # {
+    #     'name': 'Праздник двух королей',
+    #     'date': '2022-01-01',
+    #     'link': 'https://wpv.kz/the-feast-of-the-three-kings-(dreik%C3%B6nigfest).html'
+    # },
+    # {
+    #     'name': 'Праздник Четырех королей',
+    #     'date': '2022-03-01',
+    #     'link': 'https://wpv.kz/the-feast-of-the-three-kings-(dreik%C3%B6nigfest).html'
+    # }]
+    file_path = os.path.join(os.path.dirname(__file__), '../data/holidays.json')
+    with open(file_path, 'r', encoding='utf-8') as json_file:
+        data = json.load(json_file)
+
+    def get_page(data, page_number, page_size):
+        start_index = (page_number - 1) * page_size
+        end_index = start_index + page_size
+        return data[start_index:end_index]
 
     text = f'Немецкие праздники:\n'
-    data = sample_data
-
+    keyboard = InlineKeyboardMarkup()
+    keyboard.add (InlineKeyboardButton(text='Назад',
+                                       callback_data=base_cb.new(option=Menu.Back, page=1)))
     for each in data:
         #text += r'{}\n{}\n<a href="{}">{}<a/>\n'.format(each['name'], each['date'], each['link'], 'Подробнее')
         text += f"{each['name']}\n{each['date']}\n<a href='{each['link']}'>Подробнее</a>\n"

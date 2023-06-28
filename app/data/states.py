@@ -1,3 +1,5 @@
 class Menu:
-    OptionA = 'Option1'
-    OptionB = 'Option2'
+    Main = 'Main'
+    Holidays = 'Holidays'
+    Recipes = 'Recipes'
+    Back = 'Back'
