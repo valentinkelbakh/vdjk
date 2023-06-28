@@ -17,6 +17,7 @@ from aiogram.utils import exceptions
 from app.data.states import Menu
 from app import keyboards as kb
 from app.utils import tools
+from datetime import datetime, timedelta
 
 
 @dp.callback_query_handler(cb.base_cb.filter(option=Menu.Delete))
@@ -119,17 +120,18 @@ async def handleHolidays(callback_query: types.CallbackQuery, callback_data: dic
     # if len(data) > PAGE_SIZE:
     #     data = get_page(data, 1, PAGE_SIZE)
     text = f'Немецкие праздники:\n\n'
+    page = callback_data.get('page', 1)
     keyboard = InlineKeyboardMarkup()
     keyboard.add(kb.base.get_back_btn(Menu.Main))
-
+    keyboard.add(InlineKeyboardButton(text='Ближайший праздник',
+                 callback_data=cb.ext_cb.new(option=Menu.Holiday, page=page, data=5)))
     for each in data:
         # text += r'{}\n{}\n<a href="{}">{}<a/>\n'.format(each['name'], each['date'], each['link'], 'Подробнее')
         keyboard.add(InlineKeyboardButton(text=each['name'], callback_data=cb.ext_cb.new(option=Menu.Holiday, page=1, data=each['id'])))
         # prepared = f"""{each['name']}\n{each['date']}\n<a href="{each['link']}">Подробнее</a>\n\n"""
         # text += prepared
-    page = callback_data.get('page', 1)
-    # keyboard.add(InlineKeyboardButton(text='Ближайший праздник',
-    #              callback_data=cb.base_cb.new(option=Menu.Closest, page=page)))
+    
+    
     return await callback_query.message.answer(text, reply_markup=keyboard, parse_mode='HTML', disable_web_page_preview=True)
     # return await tools.update_or_send(callback_query.message, text, keyboard,parse_mode='HTML', disable_web_page_preview=True)
 
@@ -200,6 +202,7 @@ async def handleReceipt(callback_query: types.CallbackQuery, callback_data: dict
     )
 
 
+
 @dp.callback_query_handler(cb.base_cb.filter(option=Menu.Apply), state='*')
 async def handleApply(callback_query: types.CallbackQuery, callback_data: dict, state: FSMContext):
     text = 'Verband der Deutschen Jugend Kasachstans (Союз немецкой молодежи Казахстана) был создан в феврале 1996 года и объединяет клубы немецкой молодежи, функционирующие на территории Казахстана.\n\nЦелью СНМК является поддержка немецкой молодежи Казахстана для ее самореализации в различных сферах жизни, развитие конкурентоспособности молодого человека с сохранением этнической идентичности.\n\nЕжегодно СНМК реализует проекты, направленные на консолидацию молодежи, изучение и совершенствование немецкого языка, сохранения истории и культуры немцев Казахстана, развитие социальной ответственности у молодежи, укрепление партнерских отношений с другими молодежными организациями.\n\nНа данный момент по территории Казахстана существует 20 клубов и с каждым годом это число растёт!'
@@ -249,8 +252,12 @@ async def handleProject(callback_query: types.CallbackQuery, callback_data: dict
 from aiogram import utils
 utils.exceptions.BadRequest
 
-@dp.callback_query_handler(cb.base_cb.filter(option=Menu.Closest), state='*')
-async def handleClosest(callback_query: types.CallbackQuery, callback_data: dict, state: FSMContext):
-    text = 'Немецкие праздники:\n\n'
-    keyboard = InlineKeyboardMarkup()
-    keyboard.add(kb.base.get_back_btn(Menu.Main))
+# @dp.callback_query_handler(cb.base_cb.filter(option=Menu.Closest), state='*')
+# async def handleClosest(callback_query: types.CallbackQuery, callback_data: dict, state: FSMContext):
+#     text = 'Ваша инфа о ближайшем празднике'
+#     keyboard = InlineKeyboardMarkup()
+#     keyboard.add(kb.base.get_back_btn(Menu.Main))
+#     keyboard.add(InlineKeyboardButton('Перейти к празднику', callback_data=cb.ext_cb.new(option=Menu.Holiday, page=1)))
+#     return await callback_query.message.answer(text, reply_markup=keyboard)
+#     # Get the current month and day
+    
