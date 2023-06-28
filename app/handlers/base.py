@@ -124,7 +124,7 @@ async def handleHolidays(callback_query: types.CallbackQuery, callback_data: dic
     keyboard = InlineKeyboardMarkup()
     keyboard.add(kb.base.get_back_btn(Menu.Main))
     keyboard.add(InlineKeyboardButton(text='Ближайший праздник',
-                 callback_data=cb.ext_cb.new(option=Menu.Holiday, page=page, data=5)))
+                 callback_data=cb.base_cb.new(option=Menu.Closest, page=page)))
     for each in data:
         # text += r'{}\n{}\n<a href="{}">{}<a/>\n'.format(each['name'], each['date'], each['link'], 'Подробнее')
         keyboard.add(InlineKeyboardButton(text=each['name'], callback_data=cb.ext_cb.new(option=Menu.Holiday, page=1, data=each['id'])))
@@ -252,12 +252,12 @@ async def handleProject(callback_query: types.CallbackQuery, callback_data: dict
 from aiogram import utils
 utils.exceptions.BadRequest
 
-# @dp.callback_query_handler(cb.base_cb.filter(option=Menu.Closest), state='*')
-# async def handleClosest(callback_query: types.CallbackQuery, callback_data: dict, state: FSMContext):
-#     text = 'Ваша инфа о ближайшем празднике'
-#     keyboard = InlineKeyboardMarkup()
-#     keyboard.add(kb.base.get_back_btn(Menu.Main))
-#     keyboard.add(InlineKeyboardButton('Перейти к празднику', callback_data=cb.ext_cb.new(option=Menu.Holiday, page=1)))
-#     return await callback_query.message.answer(text, reply_markup=keyboard)
-#     # Get the current month and day
+@dp.callback_query_handler(cb.base_cb.filter(option=Menu.Closest), state='*')
+async def handleClosest(callback_query: types.CallbackQuery, callback_data: dict, state: FSMContext):
+    text = 'До ближайшего немецкого праздника осталось: 103 дня (-ей)\nЭто праздник: Erntedankfest'
+    keyboard = InlineKeyboardMarkup()
+    keyboard.add(kb.base.get_back_btn(Menu.Main))
+    keyboard.add(InlineKeyboardButton('Перейти к празднику', callback_data=cb.ext_cb.new(option=Menu.Holiday, page=1, data=5)))
+    return await callback_query.message.answer(text, reply_markup=keyboard)
+    # Get the current month and day
     
