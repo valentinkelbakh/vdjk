@@ -16,10 +16,24 @@ from aiogram.utils import exceptions
 from app.data.states import Menu
 from app import keyboards as kb
 
-async def update_or_send(message: types.Message, text, keyboard):
+
+async def update_or_send(message: types.Message,
+                         text, keyboard,
+                         link=None,
+                         parse_mode=None,
+                         disable_web_page_preview=None):
     try:
-        await bot.edit_message_text(text=text,
-                                    reply_markup=kb.base.main_menu,)
+        await bot.edit_message_text(
+            chat_id=message.chat.id,
+            message_id=message.message_id,
+            text=text,
+            reply_markup=keyboard,
+            parse_mode=parse_mode,
+            disable_web_page_preview=disable_web_page_preview)
     except Exception as e:
         logging.error(e)
-        await message.answer(text, reply_markup=kb.base.main_menu)
+        await message.answer(
+            text,
+            reply_markup=keyboard,
+            parse_mode=parse_mode,
+            disable_web_page_preview=disable_web_page_preview)

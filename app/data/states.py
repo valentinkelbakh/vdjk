@@ -1,4 +1,5 @@
 class Menu:
+    Delete = 'Delete'
     Main = 'Main'
     Holidays = 'Holidays'
     Closest = 'Closest'

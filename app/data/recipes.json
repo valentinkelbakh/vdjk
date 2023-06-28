@@ -1,7 +1,37 @@
 [
-    {
+  {
+    "id": 5,
+    "name": "Свиная лопатка в пиве",
+    "description": " На гарнир к этому блюду подается тушеная капуста, но в основном добавляют еще и запеченный картофель.",
+    "img-link": "https://grandkulinar.ru/uploads/posts/2018-05/1526370391_svinaya-lopatka-v-pive-s-sousom-barbekyu.jpg",
+    "recipe-link": "https://www.russianfood.com/recipes/recipe.php?rid=131328"
+  },
+  {
+    "id": 4,
+    "name": "Швабские брецели",
+    "description": " Брецели (нем. Brezel) – традиционная немецкая выпечка, ставшая популярной закуской к пиву. Такие небольшие булочки в форме кренделя отличаются тонкой тёмной корочкой, которая образуется в результате того, что перед выпечкой заготовки погружаются в кипящую воду с содой. Брецели едят горячими и холодными, подают к пиву целыми или как сэндвичи.",
+    "img-link": "https://www.unipack.ru/light_editor_img/images/2020-7-20/file1594909326.png",
+    "recipe-link": "https://www.russianfood.com/recipes/recipe.php?rid=163814"
+  },
+  {
+    "id": 3,
+    "name": "Большая котлета по-немецки",
+    "description": " Большая котлета по-немецки – мясная запеканка из говяжьего фарша, с овощами и прослойкой из вареных яиц. Экономим время, не лепим котлеты и потом не стоим у плиты, обжаривая их. А запеканка вкусная в теплом и холодном виде.",
+    "img-link": "https://img.povar.ru/mobile/26/a2/91/96/bolshaya_kotleta_po-nemecki-678617.JPG",
+    "recipe-link": "https://www.russianfood.com/recipes/recipe.php?rid=127162"
+  },
+  {
+    "id": 2,
+    "name": "Штрудель",
+    "description": " Для изготовления рулета используется замороженное слоеное тесто. В качестве начинки используются \"жареные\" яблоки",
+    "img-link": "https://www.koolinar.ru/all_image/recipes/163/163252/recipe_1742177f-b2b4-4fc2-a0d9-90799dc468a8_w450.jpg",
+    "recipe-link": "https://www.russianfood.com/recipes/recipe.php?rid=134312"
+  },
+  {
     "id": 1,
-    "name": "Красочные яйца для завтрака (Bunte Frühstückseier)",
-    "description": "5 января",
-    "img-link": "https://travelcook.ru/wp-content/uploads/2021/03/bunte-fruhstuckseier.jpg"
-    }]
+    "name": "Штрудли с картофелем и мясом",
+    "description": "Штрудли - классическое блюдо немецкой кухни. Я взяла на себя смелость внести некоторые изменения в рецепт и обогатить блюдо. Получилось очень сытно и вкусно!",
+    "img-link": "https://cdn.nur.kz/images/1120x630/616dc6d1992c4970.jpeg",
+    "recipe-link": "https://www.russianfood.com/recipes/recipe.php?rid=135113"
+  }
+]

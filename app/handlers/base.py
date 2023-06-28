@@ -1,4 +1,6 @@
-import logging, json, os
+import logging
+import json
+import os
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters import Text
@@ -16,6 +18,14 @@ from app.data.states import Menu
 from app import keyboards as kb
 from app.utils import tools
 
+
+@dp.callback_query_handler(cb.base_cb.filter(option=Menu.Delete))
+async def delete_message(call: types.CallbackQuery):
+    try:
+        await bot.delete_message(call.message.chat.id, call.message.message_id)
+    except Exception as e:
+        logging.error(e)
+
 @dp.message_handler(state='*', commands='cancel')
 @dp.message_handler(Text(equals='cancel', ignore_case=True), state='*')
 async def cancel_handler(message: types.Message, state: FSMContext):
@@ -30,6 +40,7 @@ async def cancel_handler(message: types.Message, state: FSMContext):
     await state.finish()
     await message.reply('Операция отменена.', reply_markup=types.ReplyKeyboardRemove())
 
+
 @dp.errors_handler()
 async def general_error_handler(update: types.Update, exception: Exception):
     match exception:
@@ -38,7 +49,8 @@ async def general_error_handler(update: types.Update, exception: Exception):
                 chat_id = update.callback_query.message.chat.id
             elif 'message' in update:
                 chat_id = update.message.chat.id
-            logging.error(f'⭕ Нет подключения к базе данных')
+            logging.error(
+                f'⭕ Нет подключения к базе данных')
             return await bot.send_message(chat_id, 'Нет соединения с базой данных')
         case exceptions.MessageNotModified:
             logging.error(f'⭕ Message not modified')
@@ -63,86 +75,106 @@ async def general_error_handler(update: types.Update, exception: Exception):
             logging.error(f'\nTraceback ends⭕')
             return None
 
-@dp.callback_query_handler(cb.base_cb.filter(option=Menu.Main))
+
+@dp.callback_query_handler(cb.base_cb.filter(option=Menu.Main), state='*')
 async def giveMenu(callback_query: types.CallbackQuery, callback_data: dict, state: FSMContext):
     await state.finish()
-    return await callback_query.message.answer("Тест", reply_markup=kb.base.main_menu)
-
+    text = f"Привет, {(callback_query.message.chat.first_name)}\n\
+Вас приветствует бот VDJKate. \n\
+Вы можете ознакомиться с моим функционалом, перейдя по ссылкам снизу!\
+"
+    return await tools.update_or_send(
+        callback_query.message,
+        text,
+        kb.base.main_menu
+    )
 
 
 @dp.message_handler(commands='start', state='*')
 async def cmd_start(message: types.Message, state: FSMContext):
-    """
-    Conversation's entry point
-    """
+
     await state.finish()
     user_id = message.from_id
-    text = f"Привет, {message.from_user.first_name}!"
-    return await tools.update_or_send(message, text, kb.base.main_menu)
-    
+    text = f"Привет, {(message.chat.first_name)}\n\
+Вас приветствует бот VDJKate. \n\
+Вы можете ознакомиться с моим функционалом, перейдя по ссылкам снизу!\
+"
+    return await message.answer(text, reply_markup=kb.base.main_menu)
+    #return await tools.update_or_send(message, text, kb.base.main_menu)
 
-@dp.callback_query_handler(cb.base_cb.filter(option=Menu.Holidays))
-async def handleOptionA(callback_query: types.CallbackQuery, callback_data: dict, state: FSMContext):    
-    # sample_data = [{
-    #     'name': 'Праздник трех королей',
-    #     'date': '2022-01-01',
-    #     'link': 'https://wpv.kz/the-feast-of-the-three-kings-(dreik%C3%B6nigfest).html'
-    # },
-    # {
-    #     'name': 'Праздник двух королей',
-    #     'date': '2022-01-01',
-    #     'link': 'https://wpv.kz/the-feast-of-the-three-kings-(dreik%C3%B6nigfest).html'
-    # },
-    # {
-    #     'name': 'Праздник Четырех королей',
-    #     'date': '2022-03-01',
-    #     'link': 'https://wpv.kz/the-feast-of-the-three-kings-(dreik%C3%B6nigfest).html'
-    # }]
-    file_path = os.path.join(os.path.dirname(__file__), '../data/holidays.json')
+
+@dp.callback_query_handler(cb.base_cb.filter(option=Menu.Holidays), state='*')
+async def handleHolidays(callback_query: types.CallbackQuery, callback_data: dict, state: FSMContext):
+    file_path = os.path.join(os.path.dirname(
+        __file__), '../data/holidays.json')
     with open(file_path, 'r', encoding='utf-8') as json_file:
         data = json.load(json_file)
     PAGE_SIZE = 5
-    
+
     # def get_page(data, page_number, page_size):
     #     start_index = (page_number - 1) * page_size
     #     end_index = start_index + page_size
     #     return data[start_index:end_index]
     # if len(data) > PAGE_SIZE:
     #     data = get_page(data, 1, PAGE_SIZE)
-    text = f'Немецкие праздники:\n'
+    text = f'Немецкие праздники:\n\n'
     keyboard = InlineKeyboardMarkup()
-    keyboard.add (kb.base.get_back_btn(Menu.Main))
+    keyboard.add(kb.base.get_back_btn(Menu.Main))
 
     for each in data:
-        #text += r'{}\n{}\n<a href="{}">{}<a/>\n'.format(each['name'], each['date'], each['link'], 'Подробнее')
+        # text += r'{}\n{}\n<a href="{}">{}<a/>\n'.format(each['name'], each['date'], each['link'], 'Подробнее')
         prepared = f"""{each['name']}\n{each['date']}\n<a href="{each['link']}">Подробнее</a>\n\n"""
         text += prepared
+    page = callback_data.get('page', 1)
+    keyboard.add(InlineKeyboardButton(text='Ближайший праздник',
+                 callback_data=cb.base_cb.new(option=Menu.Closest, page=page)))
+    return await callback_query.message.answer(text, reply_markup=keyboard,parse_mode='HTML', disable_web_page_preview=True)
+    # return await tools.update_or_send(callback_query.message, text, keyboard,parse_mode='HTML', disable_web_page_preview=True)
 
-    keyboard.add(InlineKeyboardButton(text='Ближайший праздник', callback_data=cb.base_cb.new(option=Menu.Closest, page=1)))
-    print(text)
-    return await callback_query.message.answer(text, parse_mode="HTML", reply_markup=keyboard)
 
-
-@dp.callback_query_handler(cb.base_cb.filter(option=Menu.Recipes))
-async def handleClosestHoliday(callback_query: types.CallbackQuery, callback_data: dict, state: FSMContext):
+@dp.callback_query_handler(cb.base_cb.filter(option=Menu.Recipes), state='*')
+async def handleReceipts(callback_query: types.CallbackQuery, callback_data: dict, state: FSMContext):
     file_path = os.path.join(os.path.dirname(__file__), '../data/recipes.json')
     with open(file_path, 'r', encoding='utf-8') as json_file:
         data = json.load(json_file)
-    
-    text = 'Список рецептов:\n'
+    page = callback_data.get('page', 1)
+    text = 'Список блюд:\n'
 
     keyboard = InlineKeyboardMarkup()
-    keyboard.add (kb.base.get_back_btn(Menu.Main))
+    keyboard.add(kb.base.get_back_btn(Menu.Main))
     for each in data:
         keyboard.add(InlineKeyboardButton(
-            text=each['name'], 
-            callback_data=cb.recipe_cb.new(option = Menu.Recipes, recipe_id=each['id'])))
+            text=each['name'],
+            callback_data=cb.recipe_cb.new(option=Menu.Recipe, page=page, data=each['id'])))
 
-    return await bot.edit_message_text (text=text,
-                                        reply_markup=keyboard,)
+    return await callback_query.message.answer(text, reply_markup=keyboard)
+
+    # return await bot.edit_message_text(
+    #     chat_id=callback_query.message.chat.id,
+    #     message_id=callback_query.message.message_id,
+    #     text=text,
+    #     reply_markup=keyboard
+    # )
 
     PAGE_SIZE = 5
-    
 
+@dp.callback_query_handler(cb.recipe_cb.filter(option=Menu.Recipe), state='*')
+async def handleReceipt(callback_query: types.CallbackQuery, callback_data: dict, state: FSMContext):
+    file_path = os.path.join(os.path.dirname(__file__), '../data/recipes.json')
+    with open(file_path, 'r', encoding='utf-8') as json_file:
+        data = json.load(json_file)
+    receipt = next((obj for obj in data if obj["id"] == int(callback_data['data'])), None)
 
-    
+    text = f"{receipt['name']}\n\n{receipt['description']}"
+    # text = f"""{receipt['name']}\n{receipt['description']}\n<a href="{receipt['recipe-link']}">Рецепт</a>\n\n"""
+
+    keyboard = InlineKeyboardMarkup()
+    keyboard.add(InlineKeyboardButton("Рецепт", url=receipt['recipe-link']))
+    keyboard.add (kb.base.kb_close)
+    return await callback_query.message.answer_photo(
+        photo=receipt['img-link'],
+        caption=text,
+        reply_markup=keyboard,
+        # parse_mode="HTML"
+    )
+
