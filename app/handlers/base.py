@@ -64,7 +64,9 @@ async def general_error_handler(update: types.Update, exception: Exception):
             return None
 
 @dp.callback_query_handler(base_cb.filter(option=Menu.Main))
-
+async def giveMenu(callback_query: types.CallbackQuery, callback_data: dict, state: FSMContext):
+    await state.finish()
+    return await callback_query.message.answer("Тест", reply_markup=kb.base.main_menu)
 
 
 
@@ -75,7 +77,6 @@ async def cmd_start(message: types.Message, state: FSMContext):
     """
     await state.finish()
     user_id = message.from_id
-    
 
     return await message.answer("Тест", reply_markup=kb.base.main_menu)
 
@@ -99,19 +100,21 @@ async def handleOptionA(callback_query: types.CallbackQuery, callback_data: dict
     file_path = os.path.join(os.path.dirname(__file__), '../data/holidays.json')
     with open(file_path, 'r', encoding='utf-8') as json_file:
         data = json.load(json_file)
-
-    def get_page(data, page_number, page_size):
-        start_index = (page_number - 1) * page_size
-        end_index = start_index + page_size
-        return data[start_index:end_index]
-
+    PAGE_SIZE = 5
+    
+    # def get_page(data, page_number, page_size):
+    #     start_index = (page_number - 1) * page_size
+    #     end_index = start_index + page_size
+    #     return data[start_index:end_index]
+    # if len(data) > PAGE_SIZE:
+    #     data = get_page(data, 1, PAGE_SIZE)
     text = f'Немецкие праздники:\n'
     keyboard = InlineKeyboardMarkup()
-    keyboard.add (InlineKeyboardButton(text='Назад',
-                                       callback_data=base_cb.new(option=Menu.Back, page=1)))
+    keyboard.add (kb.base.get_back_btn(Menu.Holidays))
+
     for each in data:
         #text += r'{}\n{}\n<a href="{}">{}<a/>\n'.format(each['name'], each['date'], each['link'], 'Подробнее')
         text += f"{each['name']}\n{each['date']}\n<a href='{each['link']}'>Подробнее</a>\n"
 
     
-    return await callback_query.message.answer(text, parse_mode="HTML")
+    return await callback_query.message.answer(text, parse_mode="HTML", reply_markup=keyboard)
