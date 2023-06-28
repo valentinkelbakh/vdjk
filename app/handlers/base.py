@@ -26,6 +26,7 @@ async def delete_message(call: types.CallbackQuery):
     except Exception as e:
         logging.error(e)
 
+
 @dp.message_handler(state='*', commands='cancel')
 @dp.message_handler(Text(equals='cancel', ignore_case=True), state='*')
 async def cancel_handler(message: types.Message, state: FSMContext):
@@ -100,7 +101,7 @@ async def cmd_start(message: types.Message, state: FSMContext):
 Вы можете ознакомиться с моим функционалом, перейдя по ссылкам снизу!\
 "
     return await message.answer(text, reply_markup=kb.base.main_menu)
-    #return await tools.update_or_send(message, text, kb.base.main_menu)
+    # return await tools.update_or_send(message, text, kb.base.main_menu)
 
 
 @dp.callback_query_handler(cb.base_cb.filter(option=Menu.Holidays), state='*')
@@ -123,13 +124,30 @@ async def handleHolidays(callback_query: types.CallbackQuery, callback_data: dic
 
     for each in data:
         # text += r'{}\n{}\n<a href="{}">{}<a/>\n'.format(each['name'], each['date'], each['link'], 'Подробнее')
-        prepared = f"""{each['name']}\n{each['date']}\n<a href="{each['link']}">Подробнее</a>\n\n"""
-        text += prepared
+        keyboard.add(InlineKeyboardButton(text=each['name'], callback_data=cb.ext_cb.new(option=Menu.Holiday, page=1, data=each['id'])))
+        # prepared = f"""{each['name']}\n{each['date']}\n<a href="{each['link']}">Подробнее</a>\n\n"""
+        # text += prepared
     page = callback_data.get('page', 1)
-    keyboard.add(InlineKeyboardButton(text='Ближайший праздник',
-                 callback_data=cb.base_cb.new(option=Menu.Closest, page=page)))
-    return await callback_query.message.answer(text, reply_markup=keyboard,parse_mode='HTML', disable_web_page_preview=True)
+    # keyboard.add(InlineKeyboardButton(text='Ближайший праздник',
+    #              callback_data=cb.base_cb.new(option=Menu.Closest, page=page)))
+    return await callback_query.message.answer(text, reply_markup=keyboard, parse_mode='HTML', disable_web_page_preview=True)
     # return await tools.update_or_send(callback_query.message, text, keyboard,parse_mode='HTML', disable_web_page_preview=True)
+
+
+@dp.callback_query_handler(cb.ext_cb.filter(option=Menu.Holiday), state='*')
+async def handleHoliday(callback_query: types.CallbackQuery, callback_data: dict, state: FSMContext):
+    file_path = os.path.join(os.path.dirname(
+        __file__), '../data/holidays.json')
+    with open(file_path, 'r', encoding='utf-8') as json_file:
+        data = json.load(json_file)
+    holiday = next(
+        (obj for obj in data if obj["id"] == int(callback_data['data'])), None)
+    text = f"{holiday['name']}\n\n{holiday['description']}"
+    keyboard = InlineKeyboardMarkup()
+    keyboard.add(InlineKeyboardButton('Подробнее', url=f'{holiday["link"]}'))
+    keyboard.add(kb.base.kb_close)
+
+    return await callback_query.message.answer(text, reply_markup=keyboard)
 
 
 @dp.callback_query_handler(cb.base_cb.filter(option=Menu.Recipes), state='*')
@@ -145,7 +163,7 @@ async def handleReceipts(callback_query: types.CallbackQuery, callback_data: dic
     for each in data:
         keyboard.add(InlineKeyboardButton(
             text=each['name'],
-            callback_data=cb.recipe_cb.new(option=Menu.Recipe, page=page, data=each['id'])))
+            callback_data=cb.ext_cb.new(option=Menu.Recipe, page=page, data=each['id'])))
 
     return await callback_query.message.answer(text, reply_markup=keyboard)
 
@@ -158,19 +176,22 @@ async def handleReceipts(callback_query: types.CallbackQuery, callback_data: dic
 
     PAGE_SIZE = 5
 
-@dp.callback_query_handler(cb.recipe_cb.filter(option=Menu.Recipe), state='*')
+
+@dp.callback_query_handler(cb.ext_cb.filter(option=Menu.Recipe), state='*')
 async def handleReceipt(callback_query: types.CallbackQuery, callback_data: dict, state: FSMContext):
     file_path = os.path.join(os.path.dirname(__file__), '../data/recipes.json')
     with open(file_path, 'r', encoding='utf-8') as json_file:
         data = json.load(json_file)
-    receipt = next((obj for obj in data if obj["id"] == int(callback_data['data'])), None)
+    receipt = next(
+        (obj for obj in data if obj["id"] == int(callback_data['data'])), None)
 
     text = f"{receipt['name']}\n\n{receipt['description']}"
     # text = f"""{receipt['name']}\n{receipt['description']}\n<a href="{receipt['recipe-link']}">Рецепт</a>\n\n"""
 
     keyboard = InlineKeyboardMarkup()
-    keyboard.add(InlineKeyboardButton("Рецепт", url=receipt['recipe-link']))
-    keyboard.add (kb.base.kb_close)
+    keyboard.add(InlineKeyboardButton(
+        "Рецепт", url=receipt['recipe-link']))
+    keyboard.add(kb.base.kb_close)
     return await callback_query.message.answer_photo(
         photo=receipt['img-link'],
         caption=text,
@@ -178,3 +199,58 @@ async def handleReceipt(callback_query: types.CallbackQuery, callback_data: dict
         # parse_mode="HTML"
     )
 
+
+@dp.callback_query_handler(cb.base_cb.filter(option=Menu.Apply), state='*')
+async def handleApply(callback_query: types.CallbackQuery, callback_data: dict, state: FSMContext):
+    text = 'Verband der Deutschen Jugend Kasachstans (Союз немецкой молодежи Казахстана) был создан в феврале 1996 года и объединяет клубы немецкой молодежи, функционирующие на территории Казахстана.\n\nЦелью СНМК является поддержка немецкой молодежи Казахстана для ее самореализации в различных сферах жизни, развитие конкурентоспособности молодого человека с сохранением этнической идентичности.\n\nЕжегодно СНМК реализует проекты, направленные на консолидацию молодежи, изучение и совершенствование немецкого языка, сохранения истории и культуры немцев Казахстана, развитие социальной ответственности у молодежи, укрепление партнерских отношений с другими молодежными организациями.\n\nНа данный момент по территории Казахстана существует 20 клубов и с каждым годом это число растёт!'
+    keyboard = InlineKeyboardMarkup()
+    keyboard.add(InlineKeyboardButton('Подать заявку',
+                 url=r'https://docs.google.com/forms/d/e/1FAIpQLSfdxmwmnS9tmH5yaY7pfO_0A4Ssk7SwDlz-DpDRfdvUsjv91g/viewform'))
+    keyboard.add(kb.base.get_back_btn(Menu.Main))
+    return await callback_query.message.answer(text, reply_markup=keyboard)
+
+
+@dp.callback_query_handler(cb.base_cb.filter(option=Menu.Projects), state='*')
+async def handleProjects(callback_query: types.CallbackQuery, callback_data: dict, state: FSMContext):
+    text = 'Проекты:\n\n'
+    keyboard = InlineKeyboardMarkup()
+    keyboard.add(kb.base.get_back_btn(Menu.Main))
+    file_path = os.path.join(os.path.dirname(__file__), '../data/projects.json')
+    with open(file_path, 'r', encoding='utf-8') as json_file:
+        data = json.load(json_file)
+    keyboard = InlineKeyboardMarkup()
+    keyboard.add(kb.base.get_back_btn(Menu.Main))
+    for each in data:
+        keyboard.add(InlineKeyboardButton(
+            text=each['name'],
+            callback_data=cb.ext_cb.new(option=Menu.Project, page=1, data=each['id'])))
+    
+    return await callback_query.message.answer(text, reply_markup=keyboard)
+
+
+@dp.callback_query_handler(cb.ext_cb.filter(option=Menu.Project), state='*')
+async def handleProject(callback_query: types.CallbackQuery, callback_data: dict, state: FSMContext):
+    file_path = os.path.join(os.path.dirname(__file__), '../data/projects.json')
+    with open(file_path, 'r', encoding='utf-8') as json_file:
+        data = json.load(json_file)
+    project = next(
+        (obj for obj in data if obj["id"] == int(callback_data['data'])), None)
+
+    text = f"""{project['name']}\n{project['description']}\n"""
+    # text = f"""{project['name']}\n{project['description']}\n<a href="{project['link']}">Подробнее</a>\n\n"""
+    keyboard = InlineKeyboardMarkup()
+    keyboard.add(InlineKeyboardButton("Подать заявку", url=project['apply-link']))
+    keyboard.add(kb.base.kb_close)
+    return await callback_query.message.answer_photo(
+        photo=project['img-link'],
+        caption=text,
+        reply_markup=keyboard
+    )
+from aiogram import utils
+utils.exceptions.BadRequest
+
+@dp.callback_query_handler(cb.base_cb.filter(option=Menu.Closest), state='*')
+async def handleClosest(callback_query: types.CallbackQuery, callback_data: dict, state: FSMContext):
+    text = 'Немецкие праздники:\n\n'
+    keyboard = InlineKeyboardMarkup()
+    keyboard.add(kb.base.get_back_btn(Menu.Main))
