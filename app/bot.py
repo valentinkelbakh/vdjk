@@ -1,10 +1,8 @@
 import logging
 from urllib.parse import urljoin
-# import phonenumbers
 
 
 from aiogram import Dispatcher, executor, types
-# from pyngrok import ngrok
 
 
 from app.utils.config import (SERVERLESS, WEBAPP_HOST, WEBAPP_PORT,
@@ -16,16 +14,6 @@ logging.basicConfig(level=logging.INFO)
 
 async def on_startup(dispatcher: Dispatcher) -> None:
     if SERVERLESS:
-        # if NGROK:
-        #     WEBHOOK_PATH = ''
-        #     ngrok.connect(WEBAPP_PORT)
-        #     urls = list(i.public_url for i in ngrok.get_tunnels()
-        #                 if 'https' in i.public_url)
-        #     WEBHOOK_URL = [i for i in urls if 'https' in i][0]
-        #     logging.info('Ngrok URL received.')
-        # else:
-        #     WEBHOOK_URL = urljoin(WEBHOOK_HOST, WEBHOOK_PATH)
-
         WEBHOOK_URL = urljoin(WEBHOOK_HOST, WEBHOOK_PATH)
         logging.info("🟢 Bot launched as Serverless!")
         logging.info(f"webhook: {WEBHOOK_URL}")
@@ -35,20 +23,6 @@ async def on_startup(dispatcher: Dispatcher) -> None:
         await bot.set_webhook(WEBHOOK_URL)
     else:
         logging.info("🟢 Bot launched!")
-    # try:
-    #     parsed_number = phonenumbers.parse(ADMIN_NUMBER, "KZ")
-    #     formatted_number = phonenumbers.format_number(
-    #         parsed_number, phonenumbers.PhoneNumberFormat.INTERNATIONAL)
-    # except phonenumbers.NumberParseException:
-    #     logging.error('🔴 Admin phone number is incorrect.')
-    
-    # admin = db.filter(db.PROFILES, phone_number=formatted_number)
-    # if not admin:
-    #     admin_role = db.filter(db.ROLES, name='Администратор')
-    #     db.add(db.PROFILES,
-    #           phone_number=formatted_number,
-    #           role=admin_role['id'],
-    #           user_id=formatted_number)
     
     await dispatcher.bot.set_my_commands([types.BotCommand(command="/start", description="Start the bot")])
 

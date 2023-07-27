@@ -46,32 +46,8 @@ async def cancel_handler(message: types.Message, state: FSMContext):
 @dp.errors_handler()
 async def general_error_handler(update: types.Update, exception: Exception):
     match exception:
-        case requests.exceptions.ConnectionError() | urllib3.exceptions.NewConnectionError():
-            if 'callback_query' in update:
-                chat_id = update.callback_query.message.chat.id
-            elif 'message' in update:
-                chat_id = update.message.chat.id
-            logging.error(
-                f'⭕ Нет подключения к базе данных')
-            return await bot.send_message(chat_id, 'Нет соединения с базой данных')
         case exceptions.MessageNotModified:
             logging.error(f'⭕ Message not modified')
-        # case PermissionError():
-        #     state = dp.current_state()
-        #     await state.finish()
-        #     if 'callback_query' in update:
-        #         try:
-        #             await bot.edit_message_text(
-        #                 chat_id=update.callback_query.message.chat.id,
-        #                 message_id=update.callback_query.message.message_id,
-        #                 text='Недостаточно прав для выполнения данного действия',
-        #                 reply_markup=get_back()
-        #             )
-        #         except:
-        #             pass
-        #         #return await update.callback_query.answer('Недостаточно прав для выполнения данного действия')
-        #     elif 'message' in update:
-        #         return await update.message.answer('Недостаточно прав для выполнения данного действия')
         case _:
             logging.exception(f'⭕Exception {exception} Exception⭕')
             logging.error(f'\nTraceback ends⭕')
