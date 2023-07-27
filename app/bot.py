@@ -23,8 +23,15 @@ async def on_startup(dispatcher: Dispatcher) -> None:
         await bot.set_webhook(WEBHOOK_URL)
     else:
         logging.info("🟢 Bot launched!")
-    
-    await dispatcher.bot.set_my_commands([types.BotCommand(command="/start", description="Start the bot")])
+    commands = [
+        BotCommand(command="/start", description="Start the bot"),
+        BotCommand(command="/holidays", description="Праздники этнических немцев"),
+        BotCommand(command="/recipes", description="Традиционные немецкие блюда"),
+        BotCommand(command="/apply", description="Вступить в КНМ"),
+        BotCommand(command="/projects", description="Предстоящие проекты"),
+    ]
+
+    await dispatcher.bot.set_my_commands(commands)
 
 
 async def on_shutdown(dispatcher: Dispatcher) -> None:
