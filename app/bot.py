@@ -1,13 +1,12 @@
 import logging
 from urllib.parse import urljoin
 
+from aiogram import Dispatcher, executor
+from aiogram.types import BotCommand
 
-from aiogram import Dispatcher, executor, types
-
-
+from app.loader import bot, dp
 from app.utils.config import (SERVERLESS, WEBAPP_HOST, WEBAPP_PORT,
                               WEBHOOK_HOST, WEBHOOK_PATH)
-from app.loader import bot, dp
 
 logging.basicConfig(level=logging.INFO)
 
