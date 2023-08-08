@@ -25,13 +25,13 @@ For Linux:
   source .venv/bin/activate
   python -m pip install -r requirements.txt
 ```
-#
+
 Before start create .env file in /app folder with following content:
 ```
 API_TOKEN=123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11
 ```
 Note: `API_TOKEN` should be your Telegram Bot token, which you can obtain from BotFather.
-#
+
 
 To start the bot:
 ```
