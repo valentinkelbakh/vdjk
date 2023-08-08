@@ -10,20 +10,20 @@ Install as pretty much any python program
 
 For windows
 ```
-  git clone https://github.com/valentinkelbakh/hackaton2023.git
-  cd hackaton2023
-  python -m venv .venv
-  .venv\Scripts\activate.bat
-  python -m pip install -r requirements.txt
+git clone https://github.com/valentinkelbakh/hackaton2023.git
+cd hackaton2023
+python -m venv .venv
+.venv\Scripts\activate.bat
+python -m pip install -r requirements.txt
 ```
 
 For Linux:
 ```
-  git clone https://github.com/valentinkelbakh/hackaton2023.git
-  cd hackaton2023
-  python -m venv .venv
-  source .venv/bin/activate
-  python -m pip install -r requirements.txt
+git clone https://github.com/valentinkelbakh/hackaton2023.git
+cd hackaton2023
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements.txt
 ```
 
 Before start create .env file in /app folder with following content:
