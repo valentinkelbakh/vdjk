@@ -140,4 +140,5 @@ django.cmd
 .VSCodeCounter/
 app/tests.py
 bot.pid
+bot.log
 start_bot.bat
