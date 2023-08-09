@@ -42,7 +42,7 @@ case "$1" in
 	   less /root/hackaton2023/bot.log
 	   ;;
    *)
-       echo "Usage: $0 {start|stop|restart|status}"
+       echo "Usage: $0 {start|stop|stop-all|restart|status|log}"
        exit 1
        ;;
 esac
