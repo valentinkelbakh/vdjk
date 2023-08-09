@@ -1,10 +1,10 @@
 import json
-import os
 import logging
+import os
 
 from aiogram import types
 from aiogram.dispatcher import FSMContext
-from aiogram.types import (InlineKeyboardButton, InlineKeyboardMarkup)
+from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 from app import keyboards as kb
 from app.data import callbacks as cb

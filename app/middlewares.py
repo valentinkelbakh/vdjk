@@ -1,9 +1,10 @@
 import logging
 import time
-import pytz
 from datetime import datetime
-from aiogram.dispatcher.middlewares import BaseMiddleware
+
+import pytz
 from aiogram import types
+from aiogram.dispatcher.middlewares import BaseMiddleware
 
 
 class MyLoggingMiddleware(BaseMiddleware):
