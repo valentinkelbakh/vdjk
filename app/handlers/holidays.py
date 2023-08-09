@@ -11,19 +11,18 @@ from app.data import callbacks as cb
 from app.data.states import Menu
 from app.loader import dp
 
+file_path = os.path.join(os.path.dirname(__file__), '../data/holidays.json')
+holidays: dict = json.load(open(file_path, 'r', encoding='utf-8'))
+
 
 @dp.message_handler(commands=['holidays'], state='*')
 @dp.callback_query_handler(cb.base_cb.filter(option=Menu.Holidays), state='*')
 async def handleHolidays(update: types.CallbackQuery | types.Message, state: FSMContext):
-    file_path = os.path.join(os.path.dirname(
-        __file__), '../data/holidays.json')
-    with open(file_path, 'r', encoding='utf-8') as json_file:
-        data = json.load(json_file)
     PAGE_SIZE = 5
     text = f'Немецкие праздники:\n\n'
     keyboard = InlineKeyboardMarkup()
     keyboard.add(kb.menu.get_back_btn(Menu.Main))
-    for each in data:
+    for each in holidays:
         keyboard.add(InlineKeyboardButton(text=each['name'], callback_data=cb.ext_cb.new(
             option=Menu.Holiday, page=1, data=each['id'])))
     if isinstance(update, types.CallbackQuery):
@@ -41,12 +40,8 @@ async def handleHolidays(update: types.CallbackQuery | types.Message, state: FSM
 
 @dp.callback_query_handler(cb.ext_cb.filter(option=Menu.Holiday), state='*')
 async def handleHoliday(callback_query: types.CallbackQuery, callback_data: dict, state: FSMContext):
-    file_path = os.path.join(os.path.dirname(
-        __file__), '../data/holidays.json')
-    with open(file_path, 'r', encoding='utf-8') as json_file:
-        data = json.load(json_file)
     holiday = next(
-        (obj for obj in data if obj["id"] == int(callback_data['data'])), None)
+        (obj for obj in holidays if obj["id"] == int(callback_data['data'])), None)
     text = f"{holiday['name']}\n\n{holiday['description']}"
     keyboard = InlineKeyboardMarkup()
     keyboard.add(InlineKeyboardButton('Подробнее', url=f'{holiday["link"]}'))

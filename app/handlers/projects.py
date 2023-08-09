@@ -10,6 +10,9 @@ from app.data import callbacks as cb
 from app.data.states import Menu
 from app.loader import dp
 
+file_path = os.path.join(os.path.dirname(__file__), '../data/projects.json')
+projects = json.load(open(file_path, 'r', encoding='utf-8'))
+
 
 @dp.message_handler(commands=['projects'], state='*')
 @dp.callback_query_handler(cb.base_cb.filter(option=Menu.Projects), state='*')
@@ -17,12 +20,9 @@ async def handleProjects(update: types.CallbackQuery | types.Message, state: FSM
     text = 'Проекты:\n\n'
     keyboard = InlineKeyboardMarkup()
     keyboard.add(kb.menu.get_back_btn(Menu.Main))
-    file_path = os.path.join(os.path.dirname(__file__), '../data/projects.json')
-    with open(file_path, 'r', encoding='utf-8') as json_file:
-        data = json.load(json_file)
     keyboard = InlineKeyboardMarkup()
     keyboard.add(kb.menu.get_back_btn(Menu.Main))
-    for each in data:
+    for each in projects:
         keyboard.add(InlineKeyboardButton(
             text=each['name'],
             callback_data=cb.ext_cb.new(option=Menu.Project, page=1, data=each['id'])))
@@ -38,12 +38,8 @@ async def handleProjects(update: types.CallbackQuery | types.Message, state: FSM
 
 @dp.callback_query_handler(cb.ext_cb.filter(option=Menu.Project), state='*')
 async def handleProject(callback_query: types.CallbackQuery, callback_data: dict, state: FSMContext):
-    file_path = os.path.join(os.path.dirname(__file__), '../data/projects.json')
-    with open(file_path, 'r', encoding='utf-8') as json_file:
-        data = json.load(json_file)
     project = next(
-        (obj for obj in data if obj["id"] == int(callback_data['data'])), None)
-
+        (obj for obj in projects if obj["id"] == int(callback_data['data'])), None)
     text = f"""{project['name']}\n{project['description']}\n"""
     keyboard = InlineKeyboardMarkup()
     keyboard.add(InlineKeyboardButton("Подать заявку", url=project['apply-link']))
