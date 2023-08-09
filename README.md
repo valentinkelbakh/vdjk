@@ -1,4 +1,4 @@
-# VDJK Bot
+# VDJKate
 
 This is Telegram bot made for [VDJK Hackathon 2023](https://vdjk.kz/hackaton2023).
 
