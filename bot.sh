@@ -38,7 +38,7 @@ case "$1" in
        echo "Related processes:"
        pgrep -f "python3.10 -m app"
        ;;
-   status)
+   log)
 	   less /root/hackaton2023/bot.log
 	   ;;
    *)
