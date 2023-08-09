@@ -15,7 +15,7 @@ async def handle_start_help(message: types.Message, state: FSMContext = None):
     return await message.answer(text=text, reply_markup=kb.menu.main_menu)
 
 
-@dp.callback_query_handler(cb.base_cb.filter(option=Menu.Main), state='*')
+@dp.callback_query_handler(cb.base_cb.filter(option=Menu.MAIN), state='*')
 async def handle_back_to_menu(callback_query: types.CallbackQuery, state: FSMContext):
     text = kb.menu.start_text.format(callback_query.message.chat.first_name)
     return await callback_query.message.edit_text(text=text, reply_markup=kb.menu.main_menu)

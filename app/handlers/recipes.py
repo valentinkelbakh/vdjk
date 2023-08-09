@@ -15,15 +15,15 @@ recipes = json.load(open(file_path, 'r', encoding='utf-8'))
 
 
 @dp.message_handler(commands=['recipes'], state='*')
-@dp.callback_query_handler(cb.base_cb.filter(option=Menu.Recipes), state='*')
+@dp.callback_query_handler(cb.base_cb.filter(option=Menu.RECIPES), state='*')
 async def handleRecipes(update: types.CallbackQuery | types.Message, state: FSMContext):
     text = 'Список блюд:\n'
     keyboard = InlineKeyboardMarkup()
-    keyboard.add(kb.menu.get_back_btn(Menu.Main))
+    keyboard.add(kb.menu.get_back_btn(Menu.MAIN))
     for each in recipes:
         keyboard.add(InlineKeyboardButton(
             text=each['name'],
-            callback_data=cb.ext_cb.new(option=Menu.Recipe, page=1, data=each['id'])))
+            callback_data=cb.ext_cb.new(option=Menu.RECIPE, page=1, data=each['id'])))
     if isinstance(update, types.CallbackQuery):
         return await update.message.edit_text(
             text=text,
@@ -34,7 +34,7 @@ async def handleRecipes(update: types.CallbackQuery | types.Message, state: FSMC
             reply_markup=keyboard,)
 
 
-@dp.callback_query_handler(cb.ext_cb.filter(option=Menu.Recipe), state='*')
+@dp.callback_query_handler(cb.ext_cb.filter(option=Menu.RECIPE), state='*')
 async def handleRecipe(callback_query: types.CallbackQuery, callback_data: dict, state: FSMContext):
     recipe = next(
         (obj for obj in recipes if obj["id"] == int(callback_data['data'])), None)

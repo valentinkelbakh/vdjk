@@ -12,23 +12,23 @@ start_text = ("Привет, {}\n"
 
 
 def get_back_btn(back_to):
-    if back_to == Menu.Main:
-        return InlineKeyboardButton(text='Назад', callback_data=cb.base_cb.new(option=Menu.Main, page=1))
-    elif back_to == Menu.Recipes:
-        return InlineKeyboardButton(text='Назад', callback_data=cb.base_cb.new(option=Menu.Recipes, page=1))
-    elif back_to == Menu.Holidays:
-        return InlineKeyboardButton(text='Назад', callback_data=cb.base_cb.new(option=Menu.Holidays, page=1))
+    if back_to == Menu.MAIN:
+        return InlineKeyboardButton(text='Назад', callback_data=cb.base_cb.new(option=Menu.MAIN, page=1))
+    elif back_to == Menu.RECIPES:
+        return InlineKeyboardButton(text='Назад', callback_data=cb.base_cb.new(option=Menu.RECIPES, page=1))
+    elif back_to == Menu.HOLIDAYS:
+        return InlineKeyboardButton(text='Назад', callback_data=cb.base_cb.new(option=Menu.HOLIDAYS, page=1))
 
 
 main_menu = InlineKeyboardMarkup()
 main_menu.add(InlineKeyboardButton(text='Праздники этнических немцев',
-                                   callback_data=cb.base_cb.new(option=Menu.Holidays, page=1)))
+                                   callback_data=cb.base_cb.new(option=Menu.HOLIDAYS, page=1)))
 main_menu.add(InlineKeyboardButton(text='Традиционные немецкие блюда',
-                                   callback_data=cb.base_cb.new(option=Menu.Recipes, page=1)))
+                                   callback_data=cb.base_cb.new(option=Menu.RECIPES, page=1)))
 main_menu.add(InlineKeyboardButton(text='Вступить в КНМ',
-                                   callback_data=cb.base_cb.new(option=Menu.Apply, page=1)))
+                                   callback_data=cb.base_cb.new(option=Menu.APPLY, page=1)))
 main_menu.add(InlineKeyboardButton(text='Предстоящие проекты',
-                                   callback_data=cb.base_cb.new(option=Menu.Projects, page=1)))
+                                   callback_data=cb.base_cb.new(option=Menu.PROJECTS, page=1)))
 
 kb_close = InlineKeyboardButton(text='Закрыть',
-                                callback_data=cb.base_cb.new(option=Menu.Delete, page=1))
+                                callback_data=cb.base_cb.new(option=Menu.DELETE, page=1))

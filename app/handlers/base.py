@@ -10,7 +10,7 @@ from app.data.states import Menu
 from app.loader import bot, dp
 
 
-@dp.callback_query_handler(cb.base_cb.filter(option=Menu.Delete))
+@dp.callback_query_handler(cb.base_cb.filter(option=Menu.DELETE))
 async def delete_message(call: types.CallbackQuery):
     try:
         await bot.delete_message(call.message.chat.id, call.message.message_id)

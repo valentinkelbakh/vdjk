@@ -15,17 +15,17 @@ projects = json.load(open(file_path, 'r', encoding='utf-8'))
 
 
 @dp.message_handler(commands=['projects'], state='*')
-@dp.callback_query_handler(cb.base_cb.filter(option=Menu.Projects), state='*')
+@dp.callback_query_handler(cb.base_cb.filter(option=Menu.PROJECTS), state='*')
 async def handleProjects(update: types.CallbackQuery | types.Message, state: FSMContext):
     text = 'Проекты:\n\n'
     keyboard = InlineKeyboardMarkup()
-    keyboard.add(kb.menu.get_back_btn(Menu.Main))
+    keyboard.add(kb.menu.get_back_btn(Menu.MAIN))
     keyboard = InlineKeyboardMarkup()
-    keyboard.add(kb.menu.get_back_btn(Menu.Main))
+    keyboard.add(kb.menu.get_back_btn(Menu.MAIN))
     for each in projects:
         keyboard.add(InlineKeyboardButton(
             text=each['name'],
-            callback_data=cb.ext_cb.new(option=Menu.Project, page=1, data=each['id'])))
+            callback_data=cb.ext_cb.new(option=Menu.PROJECT, page=1, data=each['id'])))
     if isinstance(update, types.CallbackQuery):
         return await update.message.edit_text(
             text=text,
@@ -36,7 +36,7 @@ async def handleProjects(update: types.CallbackQuery | types.Message, state: FSM
             reply_markup=keyboard,)
 
 
-@dp.callback_query_handler(cb.ext_cb.filter(option=Menu.Project), state='*')
+@dp.callback_query_handler(cb.ext_cb.filter(option=Menu.PROJECT), state='*')
 async def handleProject(callback_query: types.CallbackQuery, callback_data: dict, state: FSMContext):
     project = next(
         (obj for obj in projects if obj["id"] == int(callback_data['data'])), None)
