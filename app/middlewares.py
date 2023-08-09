@@ -26,11 +26,13 @@ class MyLoggingMiddleware(BaseMiddleware):
         current_time = current_time = pytz.timezone(
             'Asia/Almaty').localize(datetime.now()).strftime('%Y-%m-%d %H:%M:%S')
         if update.callback_query:
+            message = update.callback_query.message
             self.logger.info(
-                f"{current_time}:Received callback query [ID:{update.update_id}] from chat [{update.callback_query.message.chat.id}] ({update.callback_query.message.chat.mention})")
+                f"{current_time}:Received callback query [ID:{update.update_id}] from chat [{message.chat.id}] ({message.chat.mention})")
         elif update.message:
+            message = update.message
             self.logger.info(
-                f"{current_time}:Received message [ID:{update.update_id}] from chat [{update.message.chat.id}] ({update.message.chat.mention})")
+                f"{current_time}:Received message [ID:{update.update_id}] from chat [{message.chat.id}] ({message.chat.mention})")
 
     async def on_post_process_update(self, update: types.Update, result, data: dict):
         timeout = self.check_timeout(update)
