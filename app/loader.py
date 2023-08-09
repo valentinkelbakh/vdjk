@@ -6,7 +6,6 @@ from .middlewares import MyLoggingMiddleware
 from .utils.config import BOT_API_TOKEN
 
 bot = Bot(token=BOT_API_TOKEN)
-storage = JSONStorage(r'app/data/storage.json')
-dp = Dispatcher(bot, storage=storage)
+dp = Dispatcher(bot)
 dp.middleware.setup(MyLoggingMiddleware())
 dp.middleware.setup(LoggingMiddleware())
