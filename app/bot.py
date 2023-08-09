@@ -22,14 +22,17 @@ async def on_startup(dispatcher: Dispatcher) -> None:
         await bot.set_webhook(WEBHOOK_URL)
     else:
         logging.info("🟢 Bot launched!")
-
-    commands = [
-        BotCommand(command="/start", description="Запустить VDJKate"),
-        BotCommand(command="/holidays", description="Праздники этнических немцев"),
-        BotCommand(command="/recipes", description="Традиционные немецкие блюда"),
-        BotCommand(command="/apply", description="Вступить в КНМ"),
-        BotCommand(command="/projects", description="Предстоящие проекты"),
-    ]
+        
+    commands_set = (
+        ("/start", "Запустить VDJKate"),
+        ("/holidays", "Праздники этнических немцев"),
+        ("/recipes", "Традиционные немецкие блюда"),
+        ("/apply", "Вступить в КНМ"),
+        ("/projects", "Предстоящие проекты"),
+    )
+    commands = []
+    for command, description in commands_set:
+        commands.append(BotCommand(command=command, description=description))
     await dispatcher.bot.set_my_commands(commands)
 
     aiogram_logger = logging.getLogger('aiogram')
