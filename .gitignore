@@ -143,3 +143,4 @@ bot.pid
 bot.log
 start_bot.bat
 cron job.txt
+app/.env.orig
