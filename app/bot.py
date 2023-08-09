@@ -24,7 +24,7 @@ async def on_startup(dispatcher: Dispatcher) -> None:
         logging.info("🟢 Bot launched!")
 
     commands = [
-        BotCommand(command="/start", description="Запустить VDJK-бот"),
+        BotCommand(command="/start", description="Запустить VDJKate"),
         BotCommand(command="/holidays", description="Праздники этнических немцев"),
         BotCommand(command="/recipes", description="Традиционные немецкие блюда"),
         BotCommand(command="/apply", description="Вступить в КНМ"),
