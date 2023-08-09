@@ -22,6 +22,7 @@ async def on_startup(dispatcher: Dispatcher) -> None:
         await bot.set_webhook(WEBHOOK_URL)
     else:
         logging.info("🟢 Bot launched!")
+
     commands = [
         BotCommand(command="/start", description="Запустить VDJK-бот"),
         BotCommand(command="/holidays", description="Праздники этнических немцев"),
@@ -29,8 +30,10 @@ async def on_startup(dispatcher: Dispatcher) -> None:
         BotCommand(command="/apply", description="Вступить в КНМ"),
         BotCommand(command="/projects", description="Предстоящие проекты"),
     ]
-
     await dispatcher.bot.set_my_commands(commands)
+
+    aiogram_logger = logging.getLogger('aiogram')
+    aiogram_logger.setLevel(logging.WARNING)
 
 
 async def on_shutdown(dispatcher: Dispatcher) -> None:
