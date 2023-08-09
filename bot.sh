@@ -21,11 +21,11 @@ stop)
     fi
     ;;
 stop-all)
-    echo "Stopping all related processes..."
+    echo "Stopping all bot processes..."
     pkill -f "python3.10 -m app"
     ;;
 restart)
-    $0 stop
+    $0 stop-all
     sleep 2
     $0 start
     ;;
