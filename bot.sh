@@ -40,6 +40,7 @@ case "$1" in
        ;;
    status)
 	   less /root/hackaton2023/bot.log
+	   ;;
    *)
        echo "Usage: $0 {start|stop|restart|status}"
        exit 1
