@@ -27,7 +27,7 @@ async def on_startup(dispatcher: Dispatcher) -> None:
         ("/start", "Запустить VDJKate"),
         ("/holidays", "Праздники этнических немцев"),
         ("/recipes", "Традиционные немецкие блюда"),
-        ("/apply", "Вступить в КНМ"),
+        ("/apply", "Про СНМК"),
         ("/projects", "Предстоящие проекты"),
     )
     commands = []

@@ -17,7 +17,7 @@ recipes = json.load(open(file_path, 'r', encoding='utf-8'))
 @dp.message_handler(commands=['recipes'], state='*')
 @dp.callback_query_handler(cb.base_cb.filter(option=Menu.RECIPES), state='*')
 async def handleRecipes(update: types.CallbackQuery | types.Message, state: FSMContext):
-    text = 'Список блюд:\n'
+    text = 'Традиционные немецкие блюда:\n'
     keyboard = InlineKeyboardMarkup()
     keyboard.add(kb.menu.get_back_btn(Menu.MAIN))
     for each in recipes:

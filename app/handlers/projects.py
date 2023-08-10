@@ -17,7 +17,7 @@ projects = json.load(open(file_path, 'r', encoding='utf-8'))
 @dp.message_handler(commands=['projects'], state='*')
 @dp.callback_query_handler(cb.base_cb.filter(option=Menu.PROJECTS), state='*')
 async def handleProjects(update: types.CallbackQuery | types.Message, state: FSMContext):
-    text = 'Проекты:\n\n'
+    text = 'Предстоящие проекты СНМК:\n\n'
     keyboard = InlineKeyboardMarkup()
     keyboard.add(kb.menu.get_back_btn(Menu.MAIN))
     keyboard = InlineKeyboardMarkup()
