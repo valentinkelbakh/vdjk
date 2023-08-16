@@ -18,21 +18,6 @@ async def delete_message(call: types.CallbackQuery):
         logging.error(e)
 
 
-@dp.message_handler(state='*', commands='cancel')
-@dp.message_handler(Text(equals='cancel', ignore_case=True), state='*')
-async def cancel_handler(message: types.Message, state: FSMContext):
-    """
-    Allow user to cancel any action
-    """
-    current_state = await state.get_state()
-    if current_state is None:
-        return
-
-    logging.info('Cancelling state %r', current_state)
-    await state.finish()
-    await message.reply('Операция отменена.', reply_markup=types.ReplyKeyboardRemove())
-
-
 @dp.errors_handler()
 async def general_error_handler(update: types.Update, exception: Exception):
     match exception:
