@@ -54,14 +54,4 @@ async def handleHoliday(callback_query: types.CallbackQuery, callback_data: Exte
     reply_markup = InlineKeyboardMarkup(inline_keyboard=keyboard)
     return await callback_query.message.edit_text(
         text=text,
-@dp.callback_query_handler(cb.base_cb.filter(option=Menu.CLOSEST), state='*')
-async def handleClosest(callback_query: types.CallbackQuery, callback_data: dict, state: FSMContext):
-    logging.exception('Not implemented')
-    return
-    # text = 'До ближайшего немецкого праздника осталось: 103 дня (-ей)\nЭто праздник: Erntedankfest'
-    # keyboard = InlineKeyboardMarkup()
-    # keyboard.add(kb.base.get_back_btn(Menu.Main))
-    # keyboard.add(InlineKeyboardButton('Перейти к празднику',
-    #              callback_data=cb.ext_cb.new(option=Menu.Holiday, page=1, data=5)))
-    # # return await callback_query.message.answer(text, reply_markup=keyboard)
         reply_markup=reply_markup)
