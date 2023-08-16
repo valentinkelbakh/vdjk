@@ -1,18 +1,19 @@
+import asyncio
 import logging
 from urllib.parse import urljoin
 
-from aiogram import Dispatcher, executor
+from aiogram import Dispatcher
 from aiogram.types import BotCommand
 
 from app.loader import bot, dp
-from app.utils.config import (SERVERLESS, WEBAPP_HOST, WEBAPP_PORT,
-                              WEBHOOK_HOST, WEBHOOK_PATH)
+from app.utils.config import (WEBAPP_HOST, WEBAPP_PORT, WEBHOOK, WEBHOOK_HOST,
+                              WEBHOOK_PATH)
 
 logging.basicConfig(level=logging.INFO)
 
 
 async def on_startup(dispatcher: Dispatcher) -> None:
-    if SERVERLESS:
+    if WEBHOOK:
         WEBHOOK_URL = urljoin(WEBHOOK_HOST, WEBHOOK_PATH)
         logging.info("🟢 Bot launched as Serverless!")
         logging.info(f"webhook: {WEBHOOK_URL}")
@@ -22,7 +23,7 @@ async def on_startup(dispatcher: Dispatcher) -> None:
         await bot.set_webhook(WEBHOOK_URL)
     else:
         logging.info("🟢 Bot launched!")
-        
+
     commands_set = (
         ("/start", "Запустить VDJKate"),
         ("/holidays", "Праздники этнических немцев"),
@@ -33,7 +34,7 @@ async def on_startup(dispatcher: Dispatcher) -> None:
     commands = []
     for command, description in commands_set:
         commands.append(BotCommand(command=command, description=description))
-    await dispatcher.bot.set_my_commands(commands)
+    await bot.set_my_commands(commands)
 
     aiogram_logger = logging.getLogger('aiogram')
     aiogram_logger.setLevel(logging.WARNING)
@@ -41,33 +42,21 @@ async def on_startup(dispatcher: Dispatcher) -> None:
 
 async def on_shutdown(dispatcher: Dispatcher) -> None:
     logging.warning("🟠 Bot shutdown...")
-    if SERVERLESS is True:
+    if WEBHOOK:
         await bot.delete_webhook()
     await dispatcher.storage.close()
     await dispatcher.storage.wait_closed()
 
 
-def bot_register(webhook: bool = False) -> None:
+async def bot_register() -> None:
     try:
         import app.handlers
-
-        if SERVERLESS and webhook:
-            executor.start_webhook(
-                dispatcher=dp,
-                webhook_path=WEBHOOK_PATH,
-                on_startup=on_startup,
-                on_shutdown=on_shutdown,
-                skip_updates=True,
-                host=WEBAPP_HOST,
-                port=WEBAPP_PORT,
-            )
+        if WEBHOOK:
+            raise NotImplementedError('Webhook is not implemented yet')
         else:
-            executor.start_polling(
-                dp,
-                skip_updates=True,
-                on_startup=on_startup,
-                on_shutdown=on_shutdown,
-            )
+            dp.startup.register(on_startup)
+            dp.shutdown.register(on_shutdown)
+            await dp.start_polling(bot)
         return
     except KeyboardInterrupt:
         pass
@@ -76,4 +65,4 @@ def bot_register(webhook: bool = False) -> None:
 
 
 if __name__ == '__main__':
-    bot_register(True)
+    asyncio.run(bot_register())

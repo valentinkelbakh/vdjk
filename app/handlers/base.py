@@ -1,16 +1,16 @@
 import logging
 
-from aiogram import types
-from aiogram.dispatcher import FSMContext
-from aiogram.dispatcher.filters import Text
-from aiogram.utils import exceptions
+import aiogram
+from aiogram import F, exceptions, types
+from aiogram.fsm.context import FSMContext
+from aiogram.types import ErrorEvent
 
-from app.data import callbacks as cb
+from app.data.callbacks import BaseCallback
 from app.data.states import Menu
 from app.loader import bot, dp
 
 
-@dp.callback_query_handler(cb.base_cb.filter(option=Menu.DELETE))
+@dp.callback_query(BaseCallback.filter(F.option==Menu.DELETE))
 async def delete_message(call: types.CallbackQuery):
     try:
         await bot.delete_message(call.message.chat.id, call.message.message_id)
@@ -18,11 +18,11 @@ async def delete_message(call: types.CallbackQuery):
         logging.error(e)
 
 
-@dp.errors_handler()
-async def general_error_handler(update: types.Update, exception: Exception):
+@dp.errors()
+async def general_error_handler(event: ErrorEvent):
+    update = event.update
+    exception = event.exception
     match exception:
-        case exceptions.MessageNotModified:
-            logging.error(f'⭕ Message not modified')
         case _:
             logging.exception(f'⭕Exception {exception} Exception⭕')
             logging.error(f'\nTraceback ends⭕')
