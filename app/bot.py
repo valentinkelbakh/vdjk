@@ -50,7 +50,6 @@ async def on_shutdown(dispatcher: Dispatcher) -> None:
 def bot_register(webhook: bool = False) -> None:
     try:
         import app.handlers
-        import app.middlewares
 
         if SERVERLESS and webhook:
             executor.start_webhook(
