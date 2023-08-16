@@ -13,6 +13,7 @@ logging.basicConfig(level=logging.INFO)
 
 
 async def on_startup(dispatcher: Dispatcher) -> None:
+    logging.basicConfig(level=logging.INFO)
     if WEBHOOK:
         WEBHOOK_URL = urljoin(WEBHOOK_HOST, WEBHOOK_PATH)
         logging.info("🟢 Bot launched as Serverless!")
@@ -35,9 +36,6 @@ async def on_startup(dispatcher: Dispatcher) -> None:
     for command, description in commands_set:
         commands.append(BotCommand(command=command, description=description))
     await bot.set_my_commands(commands)
-
-    aiogram_logger = logging.getLogger('aiogram')
-    aiogram_logger.setLevel(logging.WARNING)
 
 
 async def on_shutdown(dispatcher: Dispatcher) -> None:
