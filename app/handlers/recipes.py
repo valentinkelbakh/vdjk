@@ -40,7 +40,7 @@ async def handleRecipe(callback_query: types.CallbackQuery, callback_data: Exten
     recipe = db.get(db.RECIPES, id=int(callback_data.data))
     text = f"{recipe['name']}\n\n{recipe['description']}"
     keyboard = [
-        [InlineKeyboardButton(text="Рецепт", url=recipe['recipe-link'])],
+        [InlineKeyboardButton(text="Рецепт", url=recipe['recipe_link'])],
         [kb.menu.kb_close_btn]
     ]
     reply_markup = InlineKeyboardMarkup(inline_keyboard=keyboard)
