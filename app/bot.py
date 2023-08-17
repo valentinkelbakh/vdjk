@@ -6,24 +6,14 @@ from aiogram import Dispatcher
 from aiogram.types import BotCommand
 
 from app.loader import bot, dp
-from app.utils.config import (WEBAPP_HOST, WEBAPP_PORT, WEBHOOK, WEBHOOK_HOST,
-                              WEBHOOK_PATH)
+from app.utils.config import WEBHOOK
 
 logging.basicConfig(level=logging.INFO)
 
 
 async def on_startup(dispatcher: Dispatcher) -> None:
     logging.basicConfig(level=logging.INFO)
-    if WEBHOOK:
-        WEBHOOK_URL = urljoin(WEBHOOK_HOST, WEBHOOK_PATH)
-        logging.info("🟢 Bot launched as Serverless!")
-        logging.info(f"webhook: {WEBHOOK_URL}")
-        webhook = await dispatcher.bot.get_webhook_info()
-        if webhook.url:
-            await bot.delete_webhook()
-        await bot.set_webhook(WEBHOOK_URL)
-    else:
-        logging.info("🟢 Bot launched!")
+    logging.info("🟢 Bot launched!")
 
     commands_set = (
         ("/start", "Запустить VDJKate"),
@@ -40,8 +30,6 @@ async def on_startup(dispatcher: Dispatcher) -> None:
 
 async def on_shutdown(dispatcher: Dispatcher) -> None:
     logging.warning("🟠 Bot shutdown...")
-    if WEBHOOK:
-        await bot.delete_webhook()
     await dispatcher.storage.close()
     await dispatcher.storage.wait_closed()
 
