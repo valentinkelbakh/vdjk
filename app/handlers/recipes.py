@@ -10,18 +10,16 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 from app import keyboards as kb
 from app.data.callbacks import BaseCallback, ExtendedCallback
 from app.data.states import Menu
-from app.loader import dp
-
-file_path = os.path.join(os.path.dirname(__file__), '../data/recipes.json')
-recipes = json.load(open(file_path, 'r', encoding='utf-8'))
+from app.loader import dp, db
 
 
 @dp.message(Command('recipes'))
-@dp.callback_query(BaseCallback.filter(F.option==Menu.RECIPES))
+@dp.callback_query(BaseCallback.filter(F.option == Menu.RECIPES))
 async def handleRecipes(update: types.CallbackQuery | types.Message, state: FSMContext):
     text = 'Традиционные немецкие блюда:\n'
     builder = InlineKeyboardBuilder()
     builder.add(kb.menu.get_back_btn(Menu.MAIN))
+    recipes = db.get(db.RECIPES)
     for each in recipes:
         builder.button(
             text=each['name'],
@@ -37,13 +35,10 @@ async def handleRecipes(update: types.CallbackQuery | types.Message, state: FSMC
             reply_markup=builder.as_markup(column_count=1),)
 
 
-@dp.callback_query(ExtendedCallback.filter(F.option==Menu.RECIPE))
+@dp.callback_query(ExtendedCallback.filter(F.option == Menu.RECIPE))
 async def handleRecipe(callback_query: types.CallbackQuery, callback_data: ExtendedCallback, state: FSMContext):
-    recipe = next(
-        (obj for obj in recipes if obj["id"] == int(callback_data.data)), None)
-
+    recipe = db.get(db.RECIPES, id=int(callback_data.data))
     text = f"{recipe['name']}\n\n{recipe['description']}"
-
     keyboard = [
         [InlineKeyboardButton(text="Рецепт", url=recipe['recipe-link'])],
         [kb.menu.kb_close_btn]

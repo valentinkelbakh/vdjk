@@ -11,10 +11,7 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 from app import keyboards as kb
 from app.data.callbacks import BaseCallback, ExtendedCallback
 from app.data.states import Menu
-from app.loader import dp
-
-file_path = os.path.join(os.path.dirname(__file__), '../data/holidays.json')
-holidays: dict = json.load(open(file_path, 'r', encoding='utf-8'))
+from app.loader import dp, db
 
 
 @dp.message(Command('holidays'))
@@ -22,6 +19,7 @@ holidays: dict = json.load(open(file_path, 'r', encoding='utf-8'))
 async def handleHolidays(update: types.CallbackQuery | types.Message, state: FSMContext):
     PAGE_SIZE = 5
     text = f'Немецкие праздники:\n\n'
+    holidays = db.get(db.HOLIDAYS)
     builder = InlineKeyboardBuilder()
     builder.add(kb.menu.get_back_btn(Menu.MAIN))
     for each in holidays:
@@ -44,8 +42,7 @@ async def handleHolidays(update: types.CallbackQuery | types.Message, state: FSM
 
 @dp.callback_query(ExtendedCallback.filter(F.option == Menu.HOLIDAY))
 async def handleHoliday(callback_query: types.CallbackQuery, callback_data: ExtendedCallback, state: FSMContext):
-    holiday = next(
-        (obj for obj in holidays if obj["id"] == int(callback_data.data)), None)
+    holiday = db.get(db.HOLIDAYS, id=int(callback_data.data))
     text = f"{holiday['name']}\n\n{holiday['description']}"
     keyboard = [
         [InlineKeyboardButton(text='Подробнее', url=f'{holiday["link"]}')],
