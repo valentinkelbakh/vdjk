@@ -45,7 +45,7 @@ async def handleRecipe(callback_query: types.CallbackQuery, callback_data: Exten
     ]
     reply_markup = InlineKeyboardMarkup(inline_keyboard=keyboard)
     return await callback_query.message.answer_photo(
-        photo=recipe['img-link'],
+        photo=recipe['img_link'],
         caption=text,
         reply_markup=reply_markup,
     )

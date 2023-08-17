@@ -40,12 +40,12 @@ async def handleProject(callback_query: types.CallbackQuery, callback_data: Exte
     project = db.get(db.PROJECTS, id=int(callback_data.data))
     text = f"""{project['name']}\n{project['description']}\n"""
     keyboard = [
-        [InlineKeyboardButton(text="Подать заявку", url=project['apply-link'])],
+        [InlineKeyboardButton(text="Подать заявку", url=project['apply_link'])],
         [kb.menu.kb_close_btn]
     ]
     reply_markup = InlineKeyboardMarkup(inline_keyboard=keyboard)
     return await callback_query.message.answer_photo(
-        photo=project['img-link'],
+        photo=project['img_link'],
         caption=text,
         reply_markup=reply_markup
     )
