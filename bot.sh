@@ -1,9 +1,9 @@
 # Script to manage bot process
-BOT_DIR="/root/hackaton2023"
-BOT_CMD="(cd $BOT_DIR && source /root/hackaton2023/.venv/bin/activate && python3.10 -m app)"
+BOT_DIR="/root/vdjk"
+BOT_CMD="(cd $BOT_DIR && source /root/vdjk/.venv/bin/activate && python3.10 -m app)"
 
-BOT_PID_FILE="/root/hackaton2023/bot.pid"
-BOT_LOG_FILE="/root/hackaton2023/bot.log"
+BOT_PID_FILE="/root/vdjk/bot.pid"
+BOT_LOG_FILE="/root/vdjk/bot.log"
 
 case "$1" in
 start)
