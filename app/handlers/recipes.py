@@ -1,6 +1,3 @@
-import json
-import os
-
 from aiogram import F, types
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
@@ -10,7 +7,7 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 from app import keyboards as kb
 from app.data.callbacks import BaseCallback, ExtendedCallback
 from app.data.states import Menu
-from app.loader import dp, db
+from app.loader import dp, data
 
 
 @dp.message(Command('recipes'))
@@ -19,8 +16,7 @@ async def handleRecipes(update: types.CallbackQuery | types.Message, state: FSMC
     text = 'Традиционные немецкие блюда:\n'
     builder = InlineKeyboardBuilder()
     builder.add(kb.menu.get_back_btn(Menu.MAIN))
-    recipes = db.get(db.RECIPES)
-    for each in recipes:
+    for each in data.recipes:
         builder.button(
             text=each['name'],
             callback_data=ExtendedCallback(option=Menu.RECIPE, page=1, data=str(each['id'])).pack())
@@ -37,7 +33,7 @@ async def handleRecipes(update: types.CallbackQuery | types.Message, state: FSMC
 
 @dp.callback_query(ExtendedCallback.filter(F.option == Menu.RECIPE))
 async def handleRecipe(callback_query: types.CallbackQuery, callback_data: ExtendedCallback, state: FSMContext):
-    recipe = db.get(db.RECIPES, id=int(callback_data.data))
+    recipe = data.recipe(int(callback_data.data))
     text = f"{recipe['name']}\n\n{recipe['description']}"
     keyboard = [
         [InlineKeyboardButton(text="Рецепт", url=recipe['recipe-link'])],

@@ -1,11 +1,10 @@
 import asyncio
 import logging
-from urllib.parse import urljoin
 
 from aiogram import Dispatcher
 from aiogram.types import BotCommand
 
-from app.loader import bot, dp
+from app.loader import bot, dp, server
 from app.utils.config import WEBHOOK
 
 logging.basicConfig(level=logging.INFO)
@@ -49,6 +48,16 @@ async def bot_register() -> None:
     except Exception as e:
         logging.exception(e)
 
+async def hook_server():
+    await server.serve()
+
+async def main():
+    bot_task = asyncio.create_task(bot_register())
+    hook_task = asyncio.create_task(hook_server())
+    await asyncio.gather(bot_task, hook_task)
+
+    
+
 
 if __name__ == '__main__':
-    asyncio.run(bot_register())
+    asyncio.run(main())

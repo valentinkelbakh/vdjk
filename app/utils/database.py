@@ -1,4 +1,5 @@
 from requests import Session
+from app.utils.tools import json_get_by_id
 
 class Database:
     def __init__(self, url: str, login: str, password: str):
@@ -128,3 +129,21 @@ class Database:
         if response.status_code == 403:
             raise PermissionError
         return response.json()
+class Data:
+    def __init__(self, db: Database) -> None:
+        self.db = db
+        self.holidays = db.get(db.HOLIDAYS)
+        self.recipes = db.get(db.RECIPES)
+        self.projects = db.get(db.PROJECTS)
+    
+    def update(self):
+        self.__init__(self.db)
+    
+    def recipe(self, id):
+        return json_get_by_id(self.recipes, id)
+    
+    def holiday(self, id):
+        return json_get_by_id(self.holidays, id)
+    
+    def project(self, id):
+        return json_get_by_id(self.projects, id)

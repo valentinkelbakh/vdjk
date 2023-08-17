@@ -1,6 +1,3 @@
-import json
-import os
-
 from aiogram import F, types
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
@@ -10,7 +7,7 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 from app import keyboards as kb
 from app.data.callbacks import BaseCallback, ExtendedCallback
 from app.data.states import Menu
-from app.loader import dp, db
+from app.loader import dp, data
 
 
 @dp.message(Command('projects'))
@@ -19,8 +16,7 @@ async def handleProjects(update: types.CallbackQuery | types.Message, state: FSM
     text = 'Предстоящие проекты СНМК:\n\n'
     builder = InlineKeyboardBuilder()
     builder.add(kb.menu.get_back_btn(Menu.MAIN))
-    projects = db.get(db.PROJECTS)
-    for each in projects:
+    for each in data.projects:
         builder.add(InlineKeyboardButton(
             text=each['name'],
             callback_data=ExtendedCallback(option=Menu.PROJECT, page=1, data=str(each['id'])).pack()))
@@ -37,7 +33,7 @@ async def handleProjects(update: types.CallbackQuery | types.Message, state: FSM
 
 @dp.callback_query(ExtendedCallback.filter(F.option == Menu.PROJECT))
 async def handleProject(callback_query: types.CallbackQuery, callback_data: ExtendedCallback, state: FSMContext):
-    project = db.get(db.PROJECTS, id=int(callback_data.data))
+    project = data.project(int(callback_data.data))
     text = f"""{project['name']}\n{project['description']}\n"""
     keyboard = [
         [InlineKeyboardButton(text="Подать заявку", url=project['apply-link'])],
