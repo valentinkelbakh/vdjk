@@ -1,6 +1,6 @@
 from requests import Session
 from app.utils.tools import json_get_by_id
-
+import logging
 class Database:
     def __init__(self, url: str, login: str, password: str):
         self.URL = url
@@ -132,9 +132,16 @@ class Database:
 class Data:
     def __init__(self, db: Database) -> None:
         self.db = db
-        self.holidays = db.get(db.HOLIDAYS)
-        self.recipes = db.get(db.RECIPES)
-        self.projects = db.get(db.PROJECTS)
+        try:
+            self.holidays = db.get(db.HOLIDAYS)
+            self.recipes = db.get(db.RECIPES)
+            self.projects = db.get(db.PROJECTS)
+        except Exception as e:
+            logging.error(e)
+            print("Database not available right now")
+            self.holidays = {}
+            self.recipes = {}
+            self.projects = {}
     
     def update(self):
         self.__init__(self.db)
