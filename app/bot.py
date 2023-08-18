@@ -42,11 +42,6 @@ async def bot_register() -> None:
         else:
             dp.startup.register(on_startup)
             dp.shutdown.register(on_shutdown)
-            ngrok_connect = ngrok.connect(8080)
-            WEBHOOK_URL = ngrok_connect.public_url
-            print(f'Public URL: {ngrok_connect.public_url}\n')
-            if start_webhook(WEBHOOK_URL):
-                print("Webhook started\n")
             await dp.start_polling(bot)
         return
     except KeyboardInterrupt:
@@ -56,6 +51,11 @@ async def bot_register() -> None:
 
 
 async def hook_server():
+    ngrok_connect = ngrok.connect(8080)
+    WEBHOOK_URL = ngrok_connect.public_url
+    print(f'Public URL: {ngrok_connect.public_url}\n')
+    if start_webhook(WEBHOOK_URL):
+        print("Webhook started\n")
     await server.serve()
 
 
