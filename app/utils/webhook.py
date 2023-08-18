@@ -9,7 +9,7 @@ app = FastAPI()
     Request notifies about update in database."""
 
 async def update():
-    await asyncio.sleep(5)
+    await asyncio.sleep(2)
     data.update()
 
 @app.post('/webhook-endpoint')
