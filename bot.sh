@@ -15,6 +15,7 @@ stop)
     if [ -f $BOT_PID_FILE ]; then
         rm $BOT_PID_FILE
     fi
+    pkill -9 -f "pyngrok"
     pkill -9 -f "python3.10 -m app"
     ;;
 restart)
@@ -28,8 +29,13 @@ status)
     else
         echo "Bot.sh main process is not running."
     fi
-    echo "Related processes:"
+    echo "Related bot processes:"
     pgrep -f "python3.10 -m app"
+    ## echo pyngrok runs at process:
+    echo "pyngrok:" $(pgrep -f "pyngrok")
+    ## ngrok public url of current tunnels:
+    echo "Public Ngrok URL:" $(curl -s localhost:4040/api/tunnels | jq -r '.tunnels[0].public_url')
+
     ;;
 log)
     less $BOT_DIR/bot.log
