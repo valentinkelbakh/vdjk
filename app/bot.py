@@ -1,13 +1,13 @@
 import asyncio
-import logging
-from urllib.parse import urljoin
+import logging, requests
 
 from aiogram import Dispatcher
 from aiogram.types import BotCommand
 
-from app.loader import bot, dp
+from app.loader import bot, dp, server, WEBHOOK_URL
 from app.utils.config import WEBHOOK
-
+from pyngrok import ngrok
+from app.utils.webhook import start_webhook
 logging.basicConfig(level=logging.INFO)
 
 
@@ -48,6 +48,21 @@ async def bot_register() -> None:
         pass
     except Exception as e:
         logging.exception(e)
+
+
+async def hook_server():
+    await server.serve()
+
+
+async def main():
+    ngrok_connect = ngrok.connect(8080)
+    WEBHOOK_URL = ngrok_connect.public_url
+    print(f'Public URL: {ngrok_connect.public_url}\n')
+    if start_webhook(WEBHOOK_URL):
+        print("Webhook started\n")
+    bot_task = asyncio.create_task(bot_register())
+    hook_task = asyncio.create_task(hook_server())
+    await asyncio.gather(bot_task, hook_task)
 
 
 if __name__ == '__main__':
