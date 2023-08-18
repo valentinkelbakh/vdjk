@@ -1,23 +1,25 @@
 from app.loader import data
 from app.utils.config import WEBHOOK_PASS, DB_API_URL
-from fastapi import FastAPI
+from fastapi import FastAPI, BackgroundTasks
 from fastapi import Request
 from app.loader import WEBHOOK_URL
-import requests
+import requests, asyncio
 app = FastAPI()
 """ The purpose of this app is to handle POST request sent to this endpoint.
     Request notifies about update in database."""
 
+async def update():
+    await asyncio.sleep(5)
+    data.update()
 
 @app.post('/webhook-endpoint')
-async def webhook_endpoint(request: Request):
-    # Handle the incoming webhook data here
+async def webhook_endpoint(request: Request, background_tasks: BackgroundTasks):
+    background_tasks.add_task(update)
     print(request)
     _data = await request.json()
     if _data['content'] == WEBHOOK_PASS:
         print(f"Received webhook🟡")
-        data.update()
-        return "Webhook received", 200
+        return "Webhook received"
     return "", 404
 
 
