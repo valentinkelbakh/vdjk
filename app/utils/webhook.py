@@ -23,7 +23,7 @@ async def webhook_endpoint(request: Request):
 
 @app.get('/')
 async def status():
-    print('Webhook started\n')
+    print('Webhook could start\n')
     return 'All set'
 
 
