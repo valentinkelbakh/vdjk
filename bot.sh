@@ -1,9 +1,9 @@
 # Script to manage bot process
 BOT_DIR="/root/vdjk"
-BOT_CMD="(cd $BOT_DIR && source /root/vdjk/.venv/bin/activate && python3.10 -m app)"
+BOT_CMD="(cd $BOT_DIR && source $BOT_DIR/.venv/bin/activate && python3.10 -m app)"
 
-BOT_PID_FILE="/root/vdjk/bot.pid"
-BOT_LOG_FILE="/root/vdjk/bot.log"
+BOT_PID_FILE="$BOT_DIR/bot.pid"
+BOT_LOG_FILE="$BOT_DIR/bot.log"
 
 case "$1" in
 start)
@@ -13,19 +13,12 @@ start)
     ;;
 stop)
     if [ -f $BOT_PID_FILE ]; then
-        echo "Stopping bot processes..."
-        pkill -f "python3.10 -m app"
         rm $BOT_PID_FILE
-    else
-        echo "Bot process not running!"
     fi
-    ;;
-stop-all)
-    echo "Stopping all bot processes..."
-    pkill -f "python3.10 -m app"
+    pkill -9 -f "python3.10 -m app"
     ;;
 restart)
-    $0 stop-all
+    $0 stop
     sleep 2
     $0 start
     ;;
@@ -39,10 +32,10 @@ status)
     pgrep -f "python3.10 -m app"
     ;;
 log)
-    less /root/hackaton2023/bot.log
+    less $BOT_DIR/bot.log
     ;;
 *)
-    echo "Usage: $0 {start|stop|stop-all|restart|status|log}"
+    echo "Usage: $0 {start|stop|restart|status|log}"
     exit 1
     ;;
 esac

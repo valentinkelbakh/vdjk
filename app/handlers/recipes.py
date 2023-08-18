@@ -36,12 +36,12 @@ async def handleRecipe(callback_query: types.CallbackQuery, callback_data: Exten
     recipe = data.recipe(int(callback_data.data))
     text = f"{recipe['name']}\n\n{recipe['description']}"
     keyboard = [
-        [InlineKeyboardButton(text="Рецепт", url=recipe['recipe-link'])],
+        [InlineKeyboardButton(text="Рецепт", url=recipe['recipe_link'])],
         [kb.menu.kb_close_btn]
     ]
     reply_markup = InlineKeyboardMarkup(inline_keyboard=keyboard)
     return await callback_query.message.answer_photo(
-        photo=recipe['img-link'],
+        photo=recipe['img_link'],
         caption=text,
         reply_markup=reply_markup,
     )
