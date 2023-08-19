@@ -8,7 +8,7 @@ from app import keyboards as kb
 from app.data.callbacks import BaseCallback, ExtendedCallback
 from app.data.states import Menu
 from app.loader import dp, data
-
+from app.utils.tools import trim_for_button, trim_for_caption
 
 @dp.message(Command('recipes'))
 @dp.callback_query(BaseCallback.filter(F.option == Menu.RECIPES))
@@ -18,7 +18,7 @@ async def handleRecipes(update: types.CallbackQuery | types.Message, state: FSMC
     builder.add(kb.menu.get_back_btn(Menu.MAIN))
     for each in data.recipes:
         builder.button(
-            text=each['name'],
+            text=trim_for_button(each['name']),
             callback_data=ExtendedCallback(option=Menu.RECIPE, page=1, data=str(each['id'])).pack())
     builder.adjust(1)
     if isinstance(update, types.CallbackQuery):
@@ -42,6 +42,6 @@ async def handleRecipe(callback_query: types.CallbackQuery, callback_data: Exten
     reply_markup = InlineKeyboardMarkup(inline_keyboard=keyboard)
     return await callback_query.message.answer_photo(
         photo=recipe['img_link'],
-        caption=text,
+        caption=trim_for_caption(text),
         reply_markup=reply_markup,
     )

@@ -8,7 +8,7 @@ from app import keyboards as kb
 from app.data.callbacks import BaseCallback, ExtendedCallback
 from app.data.states import Menu
 from app.loader import dp, data
-
+from app.utils.tools import trim_for_button, trim_for_message
 
 @dp.message(Command('holidays'))
 @dp.callback_query(BaseCallback.filter(F.option == Menu.HOLIDAYS))
@@ -19,7 +19,7 @@ async def handleHolidays(update: types.CallbackQuery | types.Message, state: FSM
     builder.add(kb.menu.get_back_btn(Menu.MAIN))
     for each in data.holidays:
         builder.add(InlineKeyboardButton(
-            text=each['name'],
+            text=trim_for_button(each['name']),
             callback_data=ExtendedCallback(option=Menu.HOLIDAY, page=1, data=str(each['id'])).pack()))
     builder.adjust(1)
     if isinstance(update, types.CallbackQuery):
@@ -45,5 +45,5 @@ async def handleHoliday(callback_query: types.CallbackQuery, callback_data: Exte
     ]
     reply_markup = InlineKeyboardMarkup(inline_keyboard=keyboard)
     return await callback_query.message.edit_text(
-        text=text,
+        text=trim_for_message(text),
         reply_markup=reply_markup)
