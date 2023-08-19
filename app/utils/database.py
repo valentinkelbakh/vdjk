@@ -145,7 +145,14 @@ class Data:
     
     def update(self):
         self.__init__(self.db)
-    
+        return self
+
+    async def update_async(self, seconds: int = 2):
+        """ update data after getting webhook
+            This ensures getting new data considering how Database works"""
+        await asyncio.sleep(seconds)
+        return self.update()
+
     def recipe(self, id):
         return json_get_by_id(self.recipes, id)
     

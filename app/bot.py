@@ -1,19 +1,17 @@
-import asyncio
 import logging
 
 from aiogram import Dispatcher
 from aiogram.types import BotCommand
 
-from app.loader import bot, dp, server, WEBHOOK_URL
+from app.handlers import routers
+from app.loader import bot, dp
 from app.utils.config import WEBHOOK
-from pyngrok import ngrok
-from app.utils.webhook import start_webhook
-logging.basicConfig(level=logging.INFO)
+
+logging.basicConfig(level=logging.INFO, format='%(levelname)s:%(name)s:%(asctime).19s:%(message)s')
 
 
 async def on_startup(dispatcher: Dispatcher) -> None:
-    logging.basicConfig(level=logging.INFO)
-    logging.info("🟢 Bot launched!")
+    logging.info("🟢 Bot launching...")
 
     commands_set = (
         ("/start", "Запустить VDJKate"),
@@ -31,7 +29,6 @@ async def on_startup(dispatcher: Dispatcher) -> None:
 async def on_shutdown(dispatcher: Dispatcher) -> None:
     logging.warning("🟠 Bot shutdown...")
     await dispatcher.storage.close()
-    await dispatcher.storage.wait_closed()
 
 
 async def bot_register() -> None:
@@ -45,25 +42,7 @@ async def bot_register() -> None:
             await dp.start_polling(bot)
         return
     except KeyboardInterrupt:
+        logging.info('KeyboardInterrupt')
         pass
-    except Exception as e:
+    except BaseException as e:
         logging.exception(e)
-
-
-async def hook_server():
-    ngrok_connect = ngrok.connect(8080)
-    WEBHOOK_URL = ngrok_connect.public_url
-    print(f'Public URL: {ngrok_connect.public_url}\n')
-    if start_webhook(WEBHOOK_URL):
-        print("Webhook started\n")
-    await server.serve()
-
-
-async def main():
-    bot_task = asyncio.create_task(bot_register())
-    hook_task = asyncio.create_task(hook_server())
-    await asyncio.gather(bot_task, hook_task)
-
-
-if __name__ == '__main__':
-    asyncio.run(main())
