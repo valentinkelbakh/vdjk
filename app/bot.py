@@ -33,10 +33,10 @@ async def on_shutdown(dispatcher: Dispatcher) -> None:
 
 async def bot_register() -> None:
     try:
-        import app.handlers
         if WEBHOOK:
             raise NotImplementedError('Webhook is not implemented yet')
         else:
+            dp.include_routers(*routers)
             dp.startup.register(on_startup)
             dp.shutdown.register(on_shutdown)
             await dp.start_polling(bot)

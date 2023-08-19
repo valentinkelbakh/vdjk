@@ -1,16 +1,16 @@
 import logging
 
-import aiogram
-from aiogram import F, exceptions, types
-from aiogram.fsm.context import FSMContext
+from aiogram import F, Router, types
 from aiogram.types import ErrorEvent
 
 from app.data.callbacks import BaseCallback
 from app.data.states import Menu
-from app.loader import bot, dp
+from app.loader import bot
+
+base_router = Router(name='base')
 
 
-@dp.callback_query(BaseCallback.filter(F.option==Menu.DELETE))
+@base_router.callback_query(BaseCallback.filter(F.option == Menu.DELETE))
 async def delete_message(call: types.CallbackQuery):
     try:
         await bot.delete_message(call.message.chat.id, call.message.message_id)
@@ -18,7 +18,7 @@ async def delete_message(call: types.CallbackQuery):
         logging.error(e)
 
 
-@dp.errors()
+@base_router.errors()
 async def general_error_handler(event: ErrorEvent):
     update = event.update
     exception = event.exception

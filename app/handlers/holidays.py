@@ -1,4 +1,4 @@
-from aiogram import F, types
+from aiogram import F, types, Router
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
@@ -7,11 +7,14 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 from app import keyboards as kb
 from app.data.callbacks import BaseCallback, ExtendedCallback
 from app.data.states import Menu
-from app.loader import dp, data
+from app.loader import data
 from app.utils.tools import trim_for_button, trim_for_message
 
-@dp.message(Command('holidays'))
-@dp.callback_query(BaseCallback.filter(F.option == Menu.HOLIDAYS))
+holidays_router = Router(name='holidays')
+
+
+@holidays_router.message(Command('holidays'))
+@holidays_router.callback_query(BaseCallback.filter(F.option == Menu.HOLIDAYS))
 async def handleHolidays(update: types.CallbackQuery | types.Message, state: FSMContext):
     PAGE_SIZE = 5
     text = f'Немецкие праздники:\n\n'
@@ -35,7 +38,7 @@ async def handleHolidays(update: types.CallbackQuery | types.Message, state: FSM
             disable_web_page_preview=True)
 
 
-@dp.callback_query(ExtendedCallback.filter(F.option == Menu.HOLIDAY))
+@holidays_router.callback_query(ExtendedCallback.filter(F.option == Menu.HOLIDAY))
 async def handleHoliday(callback_query: types.CallbackQuery, callback_data: ExtendedCallback, state: FSMContext):
     holiday = data.holiday(int(callback_data.data))
     text = f"{holiday['name']}\n\n{holiday['description']}"

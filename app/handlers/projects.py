@@ -1,4 +1,4 @@
-from aiogram import F, types
+from aiogram import F, types, Router
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
@@ -7,11 +7,14 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 from app import keyboards as kb
 from app.data.callbacks import BaseCallback, ExtendedCallback
 from app.data.states import Menu
-from app.loader import dp, data
+from app.loader import data
 from app.utils.tools import trim_for_button, trim_for_caption
 
-@dp.message(Command('projects'))
-@dp.callback_query(BaseCallback.filter(F.option == Menu.PROJECTS))
+projects_router = Router(name='projects')
+
+
+@projects_router.message(Command('projects'))
+@projects_router.callback_query(BaseCallback.filter(F.option == Menu.PROJECTS))
 async def handleProjects(update: types.CallbackQuery | types.Message, state: FSMContext):
     text = 'Предстоящие проекты СНМК:\n\n'
     builder = InlineKeyboardBuilder()
@@ -31,7 +34,7 @@ async def handleProjects(update: types.CallbackQuery | types.Message, state: FSM
             reply_markup=builder.as_markup(),)
 
 
-@dp.callback_query(ExtendedCallback.filter(F.option == Menu.PROJECT))
+@projects_router.callback_query(ExtendedCallback.filter(F.option == Menu.PROJECT))
 async def handleProject(callback_query: types.CallbackQuery, callback_data: ExtendedCallback, state: FSMContext):
     project = data.project(int(callback_data.data))
     text = f"{project['name']}\n{project['description']}\n"
