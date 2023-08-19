@@ -1,6 +1,13 @@
-from requests import Session
-from app.utils.tools import json_get_by_id
+import asyncio
+import json
 import logging
+import os
+
+from requests import Session
+
+from app.utils.tools import json_get_by_id
+
+
 class Database:
     def __init__(self, url: str, login: str, password: str):
         self.URL = url
@@ -129,20 +136,42 @@ class Database:
         if response.status_code == 403:
             raise PermissionError
         return response.json()
+
+
 class Data:
     def __init__(self, db: Database) -> None:
+        self.file_path = os.path.join(os.getcwd(), 'app', 'data', 'data.json')
         self.db = db
         try:
             self.holidays = db.get(db.HOLIDAYS)
             self.recipes = db.get(db.RECIPES)
             self.projects = db.get(db.PROJECTS)
         except Exception as e:
-            logging.error(e)
-            print("Database not available right now")
+            logging.info("🔵Database is not available, loading local data...")
+            self.load_data()
+
+    def load_data(self) -> None:
+        try:
+            with open(self.file_path, 'r', encoding='utf-8') as file:
+                data = json.load(file)
+                self.holidays = data.get('holidays', {})
+                self.recipes = data.get('recipes', {})
+                self.projects = data.get('projects', {})
+        except FileNotFoundError:
+            logging.info("🔵Local data is not available, considering empty...")
             self.holidays = {}
             self.recipes = {}
             self.projects = {}
-    
+
+    def save_data(self) -> None:
+        data = {
+            'holidays': self.holidays,
+            'recipes': self.recipes,
+            'projects': self.projects
+        }
+        with open(self.file_path, 'w', encoding='utf-8') as file:
+            json.dump(data, file)
+
     def update(self):
         self.__init__(self.db)
         return self
@@ -155,9 +184,9 @@ class Data:
 
     def recipe(self, id):
         return json_get_by_id(self.recipes, id)
-    
+
     def holiday(self, id):
         return json_get_by_id(self.holidays, id)
-    
+
     def project(self, id):
         return json_get_by_id(self.projects, id)
