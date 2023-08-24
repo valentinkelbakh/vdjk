@@ -37,6 +37,8 @@ async def handleRecipes(update: types.CallbackQuery | types.Message, state: FSMC
 @recipes_router.callback_query(ExtendedCallback.filter(F.option == Menu.RECIPE))
 async def handleRecipe(callback_query: types.CallbackQuery, callback_data: ExtendedCallback, state: FSMContext):
     recipe = data.recipe(int(callback_data.data))
+    if not recipe:
+        return await callback_query.answer('Информация недоступна')
     text = f"{recipe['name']}\n\n{recipe['description']}"
     keyboard = [
         [InlineKeyboardButton(text="Рецепт", url=recipe['recipe_link'])],

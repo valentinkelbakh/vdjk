@@ -41,6 +41,8 @@ async def handleHolidays(update: types.CallbackQuery | types.Message, state: FSM
 @holidays_router.callback_query(ExtendedCallback.filter(F.option == Menu.HOLIDAY))
 async def handleHoliday(callback_query: types.CallbackQuery, callback_data: ExtendedCallback, state: FSMContext):
     holiday = data.holiday(int(callback_data.data))
+    if not holiday:
+        return await callback_query.answer('Информация недоступна')
     text = f"{holiday['name']}\n\n{holiday['description']}"
     keyboard = [
         [InlineKeyboardButton(text='Подробнее', url=f'{holiday["link"]}')],

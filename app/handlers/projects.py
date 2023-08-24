@@ -37,6 +37,8 @@ async def handleProjects(update: types.CallbackQuery | types.Message, state: FSM
 @projects_router.callback_query(ExtendedCallback.filter(F.option == Menu.PROJECT))
 async def handleProject(callback_query: types.CallbackQuery, callback_data: ExtendedCallback, state: FSMContext):
     project = data.project(int(callback_data.data))
+    if not project:
+        return await callback_query.answer('Информация недоступна')
     text = f"{project['name']}\n{project['description']}\n"
     keyboard = [
         [InlineKeyboardButton(text="Подать заявку", url=project['apply_link'])],
