@@ -27,7 +27,7 @@ async def webhook_endpoint(request: Request, background_tasks: BackgroundTasks):
 
 @app.get('/')
 async def status():
-    return Response(status_code=200, content='All set')
+    return Response(status_code=200)
 
 
 @app.on_event("startup")
