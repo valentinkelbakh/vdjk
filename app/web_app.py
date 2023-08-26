@@ -9,7 +9,9 @@ from app.loader import data
 from app.utils.config import WEBHOOK_PASS
 from app.utils.web import start_ngrok, start_webhook
 
-app = FastAPI()
+app = FastAPI(docs_url=None, 
+              redoc_url=None,
+              openapi_url=None)
 loop = asyncio.get_event_loop()
 
 
