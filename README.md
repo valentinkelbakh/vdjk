@@ -9,7 +9,7 @@ It's main purpose is to offer information about traditional german dishes and ho
 Install as pretty much any python program
 
 For windows
-```
+```bat
 git clone https://github.com/valentinkelbakh/hackaton2023.git
 cd hackaton2023
 python -m venv .venv
@@ -18,7 +18,7 @@ python -m pip install -r requirements.txt
 ```
 
 For Linux:
-```
+```bash
 git clone https://github.com/valentinkelbakh/hackaton2023.git
 cd hackaton2023
 python -m venv .venv
@@ -26,14 +26,10 @@ source .venv/bin/activate
 python -m pip install -r requirements.txt
 ```
 
-Before start create .env file in /app folder with following content:
-```
-API_TOKEN=123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11
-```
-Note: `API_TOKEN` should be your Telegram Bot token, which you can obtain from BotFather.
+Before start create .env file, based on .env.example.
 
 
 To start the bot:
 ```
-python run.py
+python -m app
 ```
