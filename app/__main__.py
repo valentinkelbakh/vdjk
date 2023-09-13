@@ -1,4 +1,5 @@
 import asyncio
+
 from app.loader import server
 
 if __name__ == "__main__":

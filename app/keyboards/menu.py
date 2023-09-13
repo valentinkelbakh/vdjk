@@ -1,7 +1,4 @@
-import re
-
-from aiogram.types import (InlineKeyboardButton, InlineKeyboardMarkup,
-                           KeyboardButton, ReplyKeyboardMarkup)
+from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 from app.data.callbacks import BaseCallback
 from app.data.states import Menu

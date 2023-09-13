@@ -3,7 +3,7 @@ import logging
 import requests
 from pyngrok import ngrok
 
-from app.utils.config import DB_API_URL, WEBHOOK_PASS, DB_LOGIN, DB_PASSWORD
+from app.utils.config import DB_API_URL, DB_LOGIN, DB_PASSWORD, WEBHOOK_PASS
 
 
 def start_webhook(url):
@@ -16,11 +16,11 @@ def start_webhook(url):
     }
 
     try:
-        response = requests.post(f'{DB_API_URL}/set-webhook/', 
-                                 headers=headers, 
+        response = requests.post(f'{DB_API_URL}/set-webhook/',
+                                 headers=headers,
                                  json=payload,
                                  auth=(DB_LOGIN, DB_PASSWORD)
-)
+                                 )
     except:
         response = None
     if response and response.status_code == 200:
