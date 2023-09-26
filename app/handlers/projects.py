@@ -44,7 +44,7 @@ async def handleProject(callback_query: types.CallbackQuery, callback_data: Exte
     )
     keyboard = [
         [InlineKeyboardButton(text=_("Подать заявку"), url=project['apply_link'])],
-        [kb.menu.kb_close_btn]
+        [kb.menu.get_close_btn()]
     ]
     reply_markup = InlineKeyboardMarkup(inline_keyboard=keyboard)
     return await callback_query.message.answer_photo(

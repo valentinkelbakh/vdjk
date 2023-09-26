@@ -17,7 +17,7 @@ async def handleApply(update: types.CallbackQuery | types.Message, state: FSMCon
     text = _('Про СНМК, текст')
     keyboard = [
         [InlineKeyboardButton(text=_('Подать заявку'), url=_('Подать заявку, ссылка'))],
-        [kb.menu.get_back_btn(Menu.MAIN, text=_('Назад'))]
+        [kb.menu.get_back_btn(Menu.MAIN)]
     ]
     reply_markup = InlineKeyboardMarkup(inline_keyboard=keyboard)
     if isinstance(update, types.CallbackQuery):

@@ -44,7 +44,7 @@ async def handleRecipe(callback_query: types.CallbackQuery, callback_data: Exten
     )
     keyboard = [
         [InlineKeyboardButton(text=_("Рецепт"), url=recipe['recipe_link'])],
-        [kb.menu.kb_close_btn]
+        [kb.menu.get_close_btn()]
     ]
     reply_markup = InlineKeyboardMarkup(inline_keyboard=keyboard)
     return await callback_query.message.answer_photo(
