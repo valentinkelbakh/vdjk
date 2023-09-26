@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2023-09-26 16:53+0600\n"
+"POT-Creation-Date: 2023-09-26 18:08+0600\n"
 "PO-Revision-Date: 2023-09-26 15:29+0600\n"
 "Last-Translator: \n"
 "Language: de\n"
@@ -40,19 +40,24 @@ msgstr ""
 "Derzeit gibt es in ganz Kasachstan 20 Clubs und diese Zahl wächst jedes "
 "Jahr!"
 
-#: app/handlers/apply.py:19 app/handlers/projects.py:46
+#: app/handlers/apply.py:19
+msgid "Посетить сайт СНМК"
+msgstr "VDJK Website besuchen"
+
+#: app/handlers/apply.py:19
+msgid "Сайт СНМК, ссылка"
+msgstr ""
+"https://vdjk.kz/"
+
+#: app/handlers/apply.py:20 app/handlers/projects.py:46
 msgid "Подать заявку"
 msgstr "Anwendung einreichen"
 
-#: app/handlers/apply.py:19
+#: app/handlers/apply.py:20
 msgid "Подать заявку, ссылка"
 msgstr ""
 "https://docs.google.com/forms/d/e"
 "/1FAIpQLSfdxmwmnS9tmH5yaY7pfO_0A4Ssk7SwDlz-DpDRfdvUsjv91g/viewform"
-
-#: app/handlers/apply.py:20
-msgid "Назад"
-msgstr "Zurück"
 
 #: app/handlers/holidays.py:21
 msgid "Немецкие праздники:"
@@ -73,7 +78,7 @@ msgstr ""
 msgid "Подробнее"
 msgstr "Mehr Details"
 
-#: app/handlers/menu.py:18 app/handlers/menu.py:24
+#: app/handlers/menu.py:17 app/handlers/menu.py:23
 msgid "Приветствие"
 msgstr ""
 "Willkommen beim VDJKate-Bot.\n"
@@ -110,23 +115,27 @@ msgstr ""
 msgid "Рецепт"
 msgstr "Rezept"
 
-#: app/keyboards/menu.py:23
+#: app/keyboards/menu.py:9
+msgid "Назад"
+msgstr "Zurück"
+
+#: app/keyboards/menu.py:21
 msgid "Праздники этнических немцев"
 msgstr "Feiertage der ethnischen Deutschen"
 
-#: app/keyboards/menu.py:25
+#: app/keyboards/menu.py:23
 msgid "Традиционные немецкие блюда"
 msgstr "Traditionelle deutsche Gerichte"
 
-#: app/keyboards/menu.py:27
+#: app/keyboards/menu.py:25
 msgid "Про СНМК"
 msgstr "Über den VDJK"
 
-#: app/keyboards/menu.py:29
+#: app/keyboards/menu.py:27
 msgid "Предстоящие проекты"
 msgstr "Kommende Projekte"
 
-#: app/keyboards/menu.py:47
+#: app/keyboards/menu.py:36
 msgid "Закрыть"
 msgstr "Schließen"
 

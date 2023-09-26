@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2023-09-26 16:53+0600\n"
+"POT-Creation-Date: 2023-09-26 18:08+0600\n"
 "PO-Revision-Date: 2023-09-26 15:29+0600\n"
 "Last-Translator: \n"
 "Language: ru\n"
@@ -39,19 +39,24 @@ msgstr ""
 "На данный момент по территории Казахстана существует 20 клубов и с каждым"
 " годом это число растёт!"
 
-#: app/handlers/apply.py:19 app/handlers/projects.py:46
-msgid "Подать заявку"
+#: app/handlers/apply.py:19
+msgid "Посетить сайт СНМК"
 msgstr ""
 
 #: app/handlers/apply.py:19
+msgid "Сайт СНМК, ссылка"
+msgstr ""
+"https://vdjk.kz/"
+
+#: app/handlers/apply.py:20 app/handlers/projects.py:46
+msgid "Подать заявку"
+msgstr ""
+
+#: app/handlers/apply.py:20
 msgid "Подать заявку, ссылка"
 msgstr ""
 "https://docs.google.com/forms/d/e"
 "/1FAIpQLSfdxmwmnS9tmH5yaY7pfO_0A4Ssk7SwDlz-DpDRfdvUsjv91g/viewform"
-
-#: app/handlers/apply.py:20
-msgid "Назад"
-msgstr ""
 
 #: app/handlers/holidays.py:21
 msgid "Немецкие праздники:"
@@ -72,7 +77,7 @@ msgstr ""
 msgid "Подробнее"
 msgstr ""
 
-#: app/handlers/menu.py:18 app/handlers/menu.py:24
+#: app/handlers/menu.py:17 app/handlers/menu.py:23
 msgid "Приветствие"
 msgstr ""
 "Вас приветствует бот VDJKate.\n"
@@ -109,24 +114,27 @@ msgstr ""
 msgid "Рецепт"
 msgstr ""
 
-#: app/keyboards/menu.py:23
+#: app/keyboards/menu.py:9
+msgid "Назад"
+msgstr ""
+
+#: app/keyboards/menu.py:21
 msgid "Праздники этнических немцев"
 msgstr ""
 
-#: app/keyboards/menu.py:25
+#: app/keyboards/menu.py:23
 msgid "Традиционные немецкие блюда"
 msgstr ""
 
-#: app/keyboards/menu.py:27
+#: app/keyboards/menu.py:25
 msgid "Про СНМК"
 msgstr ""
 
-#: app/keyboards/menu.py:29
+#: app/keyboards/menu.py:27
 msgid "Предстоящие проекты"
 msgstr ""
 
-#: app/keyboards/menu.py:47
+#: app/keyboards/menu.py:36
 msgid "Закрыть"
 msgstr ""
-
 

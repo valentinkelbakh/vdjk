@@ -16,6 +16,7 @@ apply_router = Router(name='apply')
 async def handleApply(update: types.CallbackQuery | types.Message, state: FSMContext):
     text = _('Про СНМК, текст')
     keyboard = [
+        [InlineKeyboardButton(text=_('Посетить сайт СНМК'), url=_('Сайт СНМК, ссылка'))],
         [InlineKeyboardButton(text=_('Подать заявку'), url=_('Подать заявку, ссылка'))],
         [kb.menu.get_back_btn(Menu.MAIN)]
     ]
