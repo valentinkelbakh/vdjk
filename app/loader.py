@@ -1,15 +1,23 @@
 import uvicorn
 from aiogram import Bot, Dispatcher
-
+from aiogram.utils.i18n import I18n
+from aiogram.utils.i18n.middleware import SimpleI18nMiddleware
 from app.utils.database import Data, Database
+import os
 
 from .utils.config import (BOT_API_TOKEN, DB_API_URL, DB_LOGIN, DB_PASSWORD,
-                           WEBHOOK_PORT)
+                           WEBHOOK_PORT, WORKDIR)
 
 bot = Bot(token=BOT_API_TOKEN)
 dp = Dispatcher()
 db = Database(DB_API_URL, DB_LOGIN, DB_PASSWORD)
 data = Data(db)
+
+i18n = I18n(path=os.path.join(WORKDIR, 'locales'), default_locale="ru", domain="messages")
+i18n_middleware = SimpleI18nMiddleware(i18n=i18n)
+_ = i18n.gettext
+__ = i18n.lazy_gettext
+
 config = uvicorn.Config("app.web_app:app", host="0.0.0.0", port=WEBHOOK_PORT, log_level="info")
 server = uvicorn.Server(config)
 WEBHOOK_URL = ""

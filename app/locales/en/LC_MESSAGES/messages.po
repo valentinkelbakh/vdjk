@@ -1,0 +1,131 @@
+# English translations for PROJECT.
+# Copyright (C) 2023 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2023-09-26 16:53+0600\n"
+"PO-Revision-Date: 2023-09-26 15:26+0600\n"
+"Last-Translator: \n"
+"Language: en\n"
+"Language-Team: en <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.1\n"
+
+#: app/handlers/apply.py:17
+msgid "Про СНМК, текст"
+msgstr ""
+"Verband der Deutschen Jugend Kasachstans (Union of German Youth of "
+"Kazakhstan) was established in February 1996 and unites German youth "
+"clubs functioning in Kazakhstan.\n"
+"\n"
+"The purpose of VDJK is to support German youth of Kazakhstan for their "
+"self-realization in various spheres of life, development of "
+"competitiveness of a young person with preservation of ethnic identity.\n"
+"\n"
+"Every year VDJK implements projects aimed at consolidation of youth, "
+"study and improvement of German language, preservation of history and "
+"culture of Germans of Kazakhstan, development of social responsibility "
+"among youth, strengthening of partnership relations with other youth "
+"organizations.\n"
+"\n"
+"At the moment there are 20 clubs in Kazakhstan and this number is growing"
+" every year!"
+
+#: app/handlers/apply.py:19 app/handlers/projects.py:46
+msgid "Подать заявку"
+msgstr "Submit Application"
+
+#: app/handlers/apply.py:19
+msgid "Подать заявку, ссылка"
+msgstr ""
+"https://docs.google.com/forms/d/e"
+"/1FAIpQLSfdxmwmnS9tmH5yaY7pfO_0A4Ssk7SwDlz-DpDRfdvUsjv91g/viewform"
+
+#: app/handlers/apply.py:20
+msgid "Назад"
+msgstr "Back"
+
+#: app/handlers/holidays.py:21
+msgid "Немецкие праздники:"
+msgstr "German Holidays:"
+
+#: app/handlers/holidays.py:46 app/handlers/recipes.py:41
+msgid "Информация недоступна"
+msgstr "Information unavailable"
+
+#: app/handlers/holidays.py:47
+msgid ""
+"{holiday[name]}\n"
+"\n"
+"{holiday[description]}"
+msgstr ""
+
+#: app/handlers/holidays.py:50
+msgid "Подробнее"
+msgstr "More Info"
+
+#: app/handlers/menu.py:18 app/handlers/menu.py:24
+msgid "Приветствие"
+msgstr ""
+"Welcome to the VDJKate bot.\n"
+"\n"
+"VDJKate is a bot created within the framework of Hackathon 2023 by the "
+"Union of German Youth of Kazakhstan (Verband der Deutschen Jugend "
+"Kasachstans)\n"
+"The bot provides information about traditional German dishes and "
+"holidays, as well as upcoming VDJK projects.\n"
+"\n"
+"Choose what you are interested in:"
+
+#: app/handlers/projects.py:19
+msgid "Предстоящие проекты СНМК:"
+msgstr "Upcoming VDJK Projects:"
+
+#: app/handlers/projects.py:42
+msgid ""
+"{project[name]}\n"
+"{project[description]}\n"
+msgstr ""
+
+#: app/handlers/recipes.py:19
+msgid "Традиционные немецкие блюда:"
+msgstr "Traditional German Dishes:"
+
+#: app/handlers/recipes.py:42
+msgid ""
+"{recipe[name]}\n"
+"\n"
+"{recipe[description]}"
+msgstr ""
+
+#: app/handlers/recipes.py:46
+msgid "Рецепт"
+msgstr "Recipe"
+
+#: app/keyboards/menu.py:23
+msgid "Праздники этнических немцев"
+msgstr "Holidays of Ethnic Germans"
+
+#: app/keyboards/menu.py:25
+msgid "Традиционные немецкие блюда"
+msgstr "Traditional German Dishes"
+
+#: app/keyboards/menu.py:27
+msgid "Про СНМК"
+msgstr "About VDJK"
+
+#: app/keyboards/menu.py:29
+msgid "Предстоящие проекты"
+msgstr "Upcoming VDJK Projects"
+
+#: app/keyboards/menu.py:47
+msgid "Закрыть"
+msgstr "Close"
+

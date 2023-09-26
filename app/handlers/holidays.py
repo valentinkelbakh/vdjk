@@ -9,6 +9,7 @@ from app.data.callbacks import BaseCallback, ExtendedCallback
 from app.data.states import Menu
 from app.loader import data
 from app.utils.tools import trim_for_button, trim_for_message
+from app.loader import _
 
 holidays_router = Router(name='holidays')
 
@@ -17,7 +18,7 @@ holidays_router = Router(name='holidays')
 @holidays_router.callback_query(BaseCallback.filter(F.option == Menu.HOLIDAYS))
 async def handleHolidays(update: types.CallbackQuery | types.Message, state: FSMContext):
     PAGE_SIZE = 5
-    text = f'Немецкие праздники:\n\n'
+    text = _('Немецкие праздники:')
     builder = InlineKeyboardBuilder()
     builder.add(kb.menu.get_back_btn(Menu.MAIN))
     for each in data.holidays:
@@ -42,10 +43,11 @@ async def handleHolidays(update: types.CallbackQuery | types.Message, state: FSM
 async def handleHoliday(callback_query: types.CallbackQuery, callback_data: ExtendedCallback, state: FSMContext):
     holiday = data.holiday(int(callback_data.data))
     if not holiday:
-        return await callback_query.answer('Информация недоступна')
-    text = f"{holiday['name']}\n\n{holiday['description']}"
+        return await callback_query.answer(_('Информация недоступна'))
+    text = _("{holiday[name]}\n\n{holiday[description]}").format(
+        holiday=holiday)
     keyboard = [
-        [InlineKeyboardButton(text='Подробнее', url=f'{holiday["link"]}')],
+        [InlineKeyboardButton(text=_('Подробнее'), url=f'{holiday["link"]}')],
         [kb.menu.get_back_btn(Menu.HOLIDAYS)]
     ]
     reply_markup = InlineKeyboardMarkup(inline_keyboard=keyboard)

@@ -15,6 +15,7 @@ cd hackaton2023
 python -m venv .venv
 .venv\Scripts\activate.bat
 python -m pip install -r requirements.txt
+pybabel compile -d app/locales
 ```
 
 For Linux:
@@ -24,6 +25,7 @@ cd hackaton2023
 python -m venv .venv
 source .venv/bin/activate
 python -m pip install -r requirements.txt
+pybabel compile -d app/locales
 ```
 
 Before start create .env file, based on .env.example.

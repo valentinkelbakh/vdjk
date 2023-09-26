@@ -3,8 +3,8 @@ from pathlib import Path
 
 from envparse import env
 
-app_dir: Path = Path(__file__).parent.parent
-env_file = app_dir / ".env"
+WORKDIR: Path = Path(__file__).parent.parent
+env_file = WORKDIR / ".env"
 if path.isfile(env_file):
     env.read_envfile(env_file)
 BOT_API_TOKEN = env.str("API_TOKEN", default="")

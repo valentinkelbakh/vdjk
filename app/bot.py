@@ -4,7 +4,7 @@ from aiogram import Dispatcher
 from aiogram.types import BotCommand
 
 from app.handlers import routers
-from app.loader import bot, dp
+from app.loader import bot, dp, i18n_middleware
 from app.utils.config import WEBHOOK
 
 logging.basicConfig(level=logging.INFO, format='%(levelname)s:%(name)s:%(asctime).19s:%(message)s')
@@ -36,6 +36,8 @@ async def bot_register() -> None:
         if WEBHOOK:
             raise NotImplementedError('Webhook is not implemented yet')
         else:
+            for router in routers:
+                i18n_middleware.setup(router)
             dp.include_routers(*routers)
             dp.startup.register(on_startup)
             dp.shutdown.register(on_shutdown)

@@ -1,0 +1,132 @@
+# German translations for PROJECT.
+# Copyright (C) 2023 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2023-09-26 16:53+0600\n"
+"PO-Revision-Date: 2023-09-26 15:29+0600\n"
+"Last-Translator: \n"
+"Language: de\n"
+"Language-Team: de <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.1\n"
+
+#: app/handlers/apply.py:17
+msgid "Про СНМК, текст"
+msgstr ""
+"Der Verband der deutschen Jugend Kasachstans wurde im Februar 1996 "
+"gegründet und vereint die Klubs der deutschen Jugend, die in ganz "
+"Kasachstan tätig sind.\n"
+"\n"
+"Das Ziel des Verbands der deutschen Jugend Kasachstans ist es, die "
+"deutsche Jugend Kasachstans in ihrer Selbstverwirklichung in "
+"verschiedenen Lebensbereichen zu unterstützen und die Konkurrenzfähigkeit"
+" der jungen Menschen bei Wahrung der ethnischen Identität zu fördern.\n"
+"\n"
+"Jährlich realisiert der Verband der deutschen Jugend Projekte, die auf "
+"die Festigung der Jugend, das Erlernen und die Verbesserung der deutschen"
+" Sprachkenntnisse, die Bewahrung der Geschichte und Kultur der Deutschen "
+"Kasachstans, die Entwicklung sozialer Verantwortung bei den Jugendlichen "
+"sowie die Stärkung der partnerschaftlichen Beziehungen mit anderen "
+"Jugendorganisationen ausgerichtet sind.\n"
+"\n"
+"Derzeit gibt es in ganz Kasachstan 20 Clubs und diese Zahl wächst jedes "
+"Jahr!"
+
+#: app/handlers/apply.py:19 app/handlers/projects.py:46
+msgid "Подать заявку"
+msgstr "Anwendung einreichen"
+
+#: app/handlers/apply.py:19
+msgid "Подать заявку, ссылка"
+msgstr ""
+"https://docs.google.com/forms/d/e"
+"/1FAIpQLSfdxmwmnS9tmH5yaY7pfO_0A4Ssk7SwDlz-DpDRfdvUsjv91g/viewform"
+
+#: app/handlers/apply.py:20
+msgid "Назад"
+msgstr "Zurück"
+
+#: app/handlers/holidays.py:21
+msgid "Немецкие праздники:"
+msgstr "Deutsche Feiertage:"
+
+#: app/handlers/holidays.py:46 app/handlers/recipes.py:41
+msgid "Информация недоступна"
+msgstr "Information nicht verfügbar"
+
+#: app/handlers/holidays.py:47
+msgid ""
+"{holiday[name]}\n"
+"\n"
+"{holiday[description]}"
+msgstr ""
+
+#: app/handlers/holidays.py:50
+msgid "Подробнее"
+msgstr "Mehr Details"
+
+#: app/handlers/menu.py:18 app/handlers/menu.py:24
+msgid "Приветствие"
+msgstr ""
+"Willkommen beim VDJKate-Bot.\n"
+"\n"
+"VDJKate ist ein Bot, der im Rahmen des Hackathon 2023 vom Verband der "
+"Deutschen Jugend Kasachstans entwickelt wurde.\n"
+"Der Bot bietet Informationen über traditionelle deutsche Gerichte und "
+"Feiertage sowie über anstehende VDJK-Projekte.\n"
+"\n"
+"Wählen Sie aus, woran Sie interessiert sind:"
+
+#: app/handlers/projects.py:19
+msgid "Предстоящие проекты СНМК:"
+msgstr "Kommende Projekte des VDJK:"
+
+#: app/handlers/projects.py:42
+msgid ""
+"{project[name]}\n"
+"{project[description]}\n"
+msgstr ""
+
+#: app/handlers/recipes.py:19
+msgid "Традиционные немецкие блюда:"
+msgstr "Traditionelle deutsche Gerichte:"
+
+#: app/handlers/recipes.py:42
+msgid ""
+"{recipe[name]}\n"
+"\n"
+"{recipe[description]}"
+msgstr ""
+
+#: app/handlers/recipes.py:46
+msgid "Рецепт"
+msgstr "Rezept"
+
+#: app/keyboards/menu.py:23
+msgid "Праздники этнических немцев"
+msgstr "Feiertage der ethnischen Deutschen"
+
+#: app/keyboards/menu.py:25
+msgid "Традиционные немецкие блюда"
+msgstr "Traditionelle deutsche Gerichte"
+
+#: app/keyboards/menu.py:27
+msgid "Про СНМК"
+msgstr "Über den VDJK"
+
+#: app/keyboards/menu.py:29
+msgid "Предстоящие проекты"
+msgstr "Kommende Projekte"
+
+#: app/keyboards/menu.py:47
+msgid "Закрыть"
+msgstr "Schließen"
+
