@@ -9,14 +9,14 @@ from app.data.callbacks import BaseCallback, ExtendedCallback
 from app.data.states import Menu
 from app.loader import data
 from app.utils.tools import trim_for_button, trim_for_caption
-
+from app.loader import _
 recipes_router = Router(name='recipes')
 
 
 @recipes_router.message(Command('recipes'))
 @recipes_router.callback_query(BaseCallback.filter(F.option == Menu.RECIPES))
 async def handleRecipes(update: types.CallbackQuery | types.Message, state: FSMContext):
-    text = 'Традиционные немецкие блюда:\n'
+    text = _('Традиционные немецкие блюда:')
     builder = InlineKeyboardBuilder()
     builder.add(kb.menu.get_back_btn(Menu.MAIN))
     for each in data.recipes:
@@ -38,10 +38,12 @@ async def handleRecipes(update: types.CallbackQuery | types.Message, state: FSMC
 async def handleRecipe(callback_query: types.CallbackQuery, callback_data: ExtendedCallback, state: FSMContext):
     recipe = data.recipe(int(callback_data.data))
     if not recipe:
-        return await callback_query.answer('Информация недоступна')
-    text = f"{recipe['name']}\n\n{recipe['description']}"
+        return await callback_query.answer(_('Информация недоступна'))
+    text = _("{recipe[name]}\n\n{recipe[description]}").format(
+        recipe=recipe
+    )
     keyboard = [
-        [InlineKeyboardButton(text="Рецепт", url=recipe['recipe_link'])],
+        [InlineKeyboardButton(text=_("Рецепт"), url=recipe['recipe_link'])],
         [kb.menu.kb_close_btn]
     ]
     reply_markup = InlineKeyboardMarkup(inline_keyboard=keyboard)

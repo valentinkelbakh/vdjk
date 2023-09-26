@@ -9,14 +9,14 @@ from app.data.callbacks import BaseCallback, ExtendedCallback
 from app.data.states import Menu
 from app.loader import data
 from app.utils.tools import trim_for_button, trim_for_caption
-
+from app.loader import _
 projects_router = Router(name='projects')
 
 
 @projects_router.message(Command('projects'))
 @projects_router.callback_query(BaseCallback.filter(F.option == Menu.PROJECTS))
 async def handleProjects(update: types.CallbackQuery | types.Message, state: FSMContext):
-    text = 'Предстоящие проекты СНМК:\n\n'
+    text = _('Предстоящие проекты СНМК:')
     builder = InlineKeyboardBuilder()
     builder.add(kb.menu.get_back_btn(Menu.MAIN))
     for each in data.projects:
@@ -39,9 +39,11 @@ async def handleProject(callback_query: types.CallbackQuery, callback_data: Exte
     project = data.project(int(callback_data.data))
     if not project:
         return await callback_query.answer('Информация недоступна')
-    text = f"{project['name']}\n{project['description']}\n"
+    text = _("{project[name]}\n{project[description]}\n").format(
+        project=project
+    )
     keyboard = [
-        [InlineKeyboardButton(text="Подать заявку", url=project['apply_link'])],
+        [InlineKeyboardButton(text=_("Подать заявку"), url=project['apply_link'])],
         [kb.menu.kb_close_btn]
     ]
     reply_markup = InlineKeyboardMarkup(inline_keyboard=keyboard)
