@@ -6,6 +6,7 @@ from aiogram.types import BotCommand
 from app.handlers import routers
 from app.loader import bot, dp, i18n_middleware
 from app.utils.config import WEBHOOK
+from app.utils.middlewares import ActivityMiddleware
 
 logging.basicConfig(level=logging.INFO, format='%(levelname)s:%(name)s:%(asctime).19s:%(message)s')
 
@@ -37,6 +38,7 @@ async def bot_register() -> None:
             raise NotImplementedError('Webhook is not implemented yet')
         else:
             for router in routers:
+                router.message.middleware(ActivityMiddleware())
                 i18n_middleware.setup(router)
             dp.include_routers(*routers)
             dp.startup.register(on_startup)
