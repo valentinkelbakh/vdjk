@@ -39,6 +39,7 @@ async def bot_register() -> None:
         else:
             for router in routers:
                 router.message.middleware(ActivityMiddleware())
+                router.callback_query.middleware(ActivityMiddleware())
                 i18n_middleware.setup(router)
             dp.include_routers(*routers)
             dp.startup.register(on_startup)
