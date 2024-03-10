@@ -131,17 +131,14 @@ dmypy.json
 .vercel
 
 .vscode/
-api/index.py.backup
-.prev
-*.backup
-storage.json
 django.cmd
 
 .VSCodeCounter/
-app/tests.py
 bot.pid
 bot.log
 start_bot.bat
 cron job.txt
-app/.env.orig
 app/data/data.json
+
+.env*
+!.env.example
