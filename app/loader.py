@@ -5,10 +5,10 @@ from aiogram.utils.i18n.middleware import SimpleI18nMiddleware
 from app.utils.database import Data, Database
 import os, logging
 
-from .utils.config import (BOT_BOT_TOKEN, API_URL, API_LOGIN, API_PASSWORD,
+from .utils.config import (BOT_TOKEN, API_URL, API_LOGIN, API_PASSWORD,
                            WEBHOOK_PORT, WORKDIR)
 
-bot = Bot(token=BOT_BOT_TOKEN)
+bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher()
 db = Database(API_URL, API_LOGIN, API_PASSWORD)
 data = Data(db)

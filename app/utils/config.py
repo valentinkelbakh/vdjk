@@ -7,7 +7,7 @@ WORKDIR: Path = Path(__file__).parent.parent
 env_file = WORKDIR / ".env"
 if path.isfile(env_file):
     env.read_envfile(env_file)
-BOT_BOT_TOKEN = env.str("BOT_TOKEN", default="")
+BOT_TOKEN = env.str("BOT_TOKEN", default="")
 API_URL = env.str("API_URL", default='127.0.0.1:8000/')
 API_LOGIN = env.str("API_LOGIN")
 API_PASSWORD = env.str("API_PASSWORD")
