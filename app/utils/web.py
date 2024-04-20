@@ -22,9 +22,11 @@ def start_webhook(url):
                                  auth=(API_LOGIN, API_PASSWORD)
                                  )
     except:
-        response = None
+        logging.error(f'⭕ Webhook not set {response} ⭕')
     if response and response.status_code == 200:
         logging.info(f'🔵 URL for webhook set')
+    else:
+        logging.warning(f'⭕ Webhook not delivered {response} ⭕')
 
 
 def start_ngrok() -> str:
