@@ -16,6 +16,7 @@ class Database:
         self.HOLIDAYS = 'holidays'
         self.PROJECTS = 'projects'
         self.RECIPES = 'recipes'
+        self.SUBJECTS = [self.HOLIDAYS, self.PROJECTS, self.RECIPES]
 
     def get(self, subject: str, id: int = '') -> dict | list[dict]:
         """
@@ -139,13 +140,18 @@ class Database:
 
 
 class Data:
-    def __init__(self, db: Database) -> None:
+    def __init__(self, db: Database, update_subject = '') -> None:
         self.file_path = os.path.join(os.getcwd(), 'app', 'data', 'data.json')
         self.db = db
         try:
-            self.holidays = db.get(db.HOLIDAYS)
-            self.recipes = db.get(db.RECIPES)
-            self.projects = db.get(db.PROJECTS)
+            if not update_subject:
+                self.holidays = db.get(db.HOLIDAYS)
+                self.recipes = db.get(db.RECIPES)
+                self.projects = db.get(db.PROJECTS)
+            elif update_subject in db.SUBJECTS:
+                setattr(self, update_subject, db.get(update_subject))
+            else:
+                logging.error(f'⭕Unknown subject "{update_subject}"⭕')
         except Exception as e:
             logging.info("🔵Database is not available, loading local data...")
             self.load_data()
@@ -172,15 +178,16 @@ class Data:
         with open(self.file_path, 'w', encoding='utf-8') as file:
             json.dump(data, file)
 
-    def update(self):
-        self.__init__(self.db)
+    def update(self, update_subject):
+        self.__init__(self.db, update_subject = update_subject)
+        self.save_data()
         return self
 
-    async def update_async(self, seconds: int = 2):
+    async def update_async(self, update_subject = '', seconds: int = 2):
         """ update data after getting webhook
             This ensures getting new data considering how Database works"""
         await asyncio.sleep(seconds)
-        return self.update()
+        return self.update(update_subject = update_subject)
 
     def recipe(self, id):
         return json_get_by_id(self.recipes, id)

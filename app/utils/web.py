@@ -11,7 +11,7 @@ def start_webhook(url):
         "Content-Type": "application/json"
     }
     payload = {
-        "content": WEBHOOK_PASS,
+        "webhook_pass": WEBHOOK_PASS,
         'webhook_url': url
     }
 

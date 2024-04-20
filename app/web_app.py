@@ -19,9 +19,9 @@ loop = asyncio.get_event_loop()
 async def webhook_endpoint(request: Request, background_tasks: BackgroundTasks):
     global data
     _data = await request.json()
-    if _data['content'] == WEBHOOK_PASS:
-        background_tasks.add_task(data.update_async)
-        background_tasks.add_task(data.save_data)
+    if _data['webhook_pass'] == WEBHOOK_PASS:
+        background_tasks.add_task(data.update_async, update_subject=_data['update_subject'])
+        # background_tasks.add_task(data.save_data)
         logging.info('🔵Webhook received, updating..')
         return Response(status_code=200, content='Webhook received')
     return HTTPException(status_code=403)
