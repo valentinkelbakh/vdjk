@@ -23,8 +23,8 @@ class Database:
         Get entity by id:
         >>> db.get(db.HOLIDAYS,data['id'])
         """
-        if id or subject in ["actions", "subjects"]:
         url = f"{self.URL}/{subject}/"
+        if id:
             url += f"{id}/"
             response = self.session.get(url)
             if response.status_code == 404:
