@@ -1,5 +1,6 @@
 import asyncio
 import logging
+from contextlib import asynccontextmanager
 
 from fastapi import BackgroundTasks, FastAPI, HTTPException, Request, Response
 from fastapi.concurrency import run_in_threadpool
@@ -9,13 +10,22 @@ from app.loader import data
 from app.utils.config import DB_WEBHOOK_PASS
 from app.utils.web import start_ngrok, start_webhook
 
-app = FastAPI(docs_url=None,
-              redoc_url=None,
-              openapi_url=None)
 loop = asyncio.get_event_loop()
 
 
 @app.post('/webhook-endpoint')
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    loop.create_task(bot.bot_register())
+    ngrok_url = await run_in_threadpool(start_ngrok)
+    loop.run_in_executor(None, start_webhook, ngrok_url)
+    yield
+    await bot.dp.stop_polling()
+
+
+app = FastAPI(docs_url=None, redoc_url=None, openapi_url=None, lifespan=lifespan)
+
+
 async def webhook_endpoint(request: Request, background_tasks: BackgroundTasks):
     global data
     _data = await request.json()
@@ -32,13 +42,3 @@ async def status():
     return Response(status_code=200)
 
 
-@app.on_event("startup")
-async def app_startup():
-    loop.create_task(bot.bot_register())
-    ngrok_url = await run_in_threadpool(start_ngrok)
-    loop.run_in_executor(None, start_webhook, ngrok_url)
-
-
-@app.on_event("shutdown")
-async def app_shutdown():
-    await bot.dp.stop_polling()
