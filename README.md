@@ -36,7 +36,7 @@ pybabel compile -d app/locales
 ```
 
 Before start create .env file, based on .env.example.
-API_LOGIN, API_PASSWORD and WEBHOOK_PASS should match appropriate values used during database installation.
+API_LOGIN, API_PASSWORD and DB_WEBHOOK_PASS should match appropriate values used during database installation.
 
 To start the bot:
 ```

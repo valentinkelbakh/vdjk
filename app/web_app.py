@@ -6,7 +6,7 @@ from fastapi.concurrency import run_in_threadpool
 
 from app import bot
 from app.loader import data
-from app.utils.config import WEBHOOK_PASS
+from app.utils.config import DB_WEBHOOK_PASS
 from app.utils.web import start_ngrok, start_webhook
 
 app = FastAPI(docs_url=None,
@@ -19,7 +19,7 @@ loop = asyncio.get_event_loop()
 async def webhook_endpoint(request: Request, background_tasks: BackgroundTasks):
     global data
     _data = await request.json()
-    if _data['webhook_pass'] == WEBHOOK_PASS:
+    if _data['webhook_pass'] == DB_WEBHOOK_PASS:
         background_tasks.add_task(data.update_async, update_subject=_data['update_subject'])
         # background_tasks.add_task(data.save_data)
         logging.info('🔵Webhook received, updating..')

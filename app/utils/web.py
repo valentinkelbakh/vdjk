@@ -3,7 +3,7 @@ import logging
 import requests
 from pyngrok import ngrok
 
-from app.utils.config import API_URL, API_LOGIN, API_PASSWORD, WEBHOOK_PASS
+from app.utils.config import API_URL, API_LOGIN, API_PASSWORD, DB_WEBHOOK_PASS
 
 
 def start_webhook(url):
@@ -11,7 +11,7 @@ def start_webhook(url):
         "Content-Type": "application/json"
     }
     payload = {
-        "webhook_pass": WEBHOOK_PASS,
+        "webhook_pass": DB_WEBHOOK_PASS,
         'webhook_url': url
     }
 
