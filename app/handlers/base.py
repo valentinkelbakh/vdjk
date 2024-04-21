@@ -7,7 +7,7 @@ from app.data.callbacks import BaseCallback
 from app.data.states import Menu
 from app.loader import bot
 
-base_router = Router(name='base')
+base_router = Router(name="base")
 
 
 @base_router.callback_query(BaseCallback.filter(F.option == Menu.DELETE))
@@ -24,6 +24,6 @@ async def general_error_handler(event: ErrorEvent):
     exception = event.exception
     match exception:
         case _:
-            logging.exception(f'⭕Exception {exception} Exception⭕')
-            logging.error(f'\nTraceback ends⭕')
+            logging.exception(f"⭕Exception {exception} Exception⭕")
+            logging.error(f"\nTraceback ends⭕")
             return None

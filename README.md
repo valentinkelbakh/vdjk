@@ -7,8 +7,6 @@ It's main purpose is to offer information about traditional german dishes and ho
 It was initially created for [VDJK Hackathon 2023](https://vdjk.kz/hackaton2023).
 I continued developing this bot after Hackathon for a while and this is latest version of the bot.
 
-
-
 ## Installation
 
 First set up a [Database](https://github.com/valentinkelbakh/vdjk_db) for this bot.
@@ -16,6 +14,7 @@ First set up a [Database](https://github.com/valentinkelbakh/vdjk_db) for this b
 Then:
 
 For windows:
+
 ```bat
 git clone https://github.com/valentinkelbakh/vdjk.git
 cd vdjk
@@ -26,6 +25,7 @@ pybabel compile -d app/locales
 ```
 
 For Linux:
+
 ```bash
 git clone https://github.com/valentinkelbakh/vdjk.git
 cd vdjk
@@ -39,6 +39,7 @@ Before start create .env file, based on .env.example.
 API_LOGIN, API_PASSWORD and DB_WEBHOOK_PASS should match appropriate values used during database installation.
 
 To start the bot:
+
 ```
 python -m app
 ```

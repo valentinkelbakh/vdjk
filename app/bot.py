@@ -8,7 +8,9 @@ from app.loader import bot, dp, i18n_middleware
 from app.utils.config import WEBHOOK
 from app.utils.middlewares import ActivityMiddleware
 
-logging.basicConfig(level=logging.INFO, format='%(levelname)s:%(name)s:%(asctime).19s:%(message)s')
+logging.basicConfig(
+    level=logging.INFO, format="%(levelname)s:%(name)s:%(asctime).19s:%(message)s"
+)
 
 
 async def on_startup(dispatcher: Dispatcher) -> None:
@@ -35,7 +37,7 @@ async def on_shutdown(dispatcher: Dispatcher) -> None:
 async def bot_register() -> None:
     try:
         if WEBHOOK:
-            raise NotImplementedError('Webhook is not implemented yet')
+            raise NotImplementedError("Webhook is not implemented yet")
         else:
             for router in routers:
                 router.message.middleware(ActivityMiddleware())
@@ -47,7 +49,7 @@ async def bot_register() -> None:
             await dp.start_polling(bot)
         return
     except KeyboardInterrupt:
-        logging.info('KeyboardInterrupt')
+        logging.info("KeyboardInterrupt")
         pass
     except BaseException as e:
         logging.exception(e)

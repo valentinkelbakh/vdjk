@@ -13,22 +13,22 @@ class Database:
         self.URL = url
         self.session = Session()
         self.session.auth = (login, password)
-        self.HOLIDAYS = 'holidays'
-        self.PROJECTS = 'projects'
-        self.RECIPES = 'recipes'
+        self.HOLIDAYS = "holidays"
+        self.PROJECTS = "projects"
+        self.RECIPES = "recipes"
         self.SUBJECTS = [self.HOLIDAYS, self.PROJECTS, self.RECIPES]
 
-    def get(self, subject: str, id: int = '') -> dict | list[dict]:
+    def get(self, subject: str, id: int = "") -> dict | list[dict]:
         """
-        Get all entities by subject: 
+        Get all entities by subject:
         >>> db.get(db.HOLIDAYS)
 
-        Get entity by id: 
+        Get entity by id:
         >>> db.get(db.HOLIDAYS,data['id'])
         """
-        url = f'{self.URL}/{subject}'
-        if id or subject in ['actions', 'subjects']:
-            url += f'/{id}'
+        url = f"{self.URL}/{subject}"
+        if id or subject in ["actions", "subjects"]:
+            url += f"/{id}"
             response = self.session.get(url)
             if response.status_code == 404:
                 return []
@@ -43,13 +43,13 @@ class Database:
                 if response.status_code == 403:
                     raise PermissionError
                 response = response.json()
-                if 'results' in response.keys():
-                    result = result + response['results']
+                if "results" in response.keys():
+                    result = result + response["results"]
                 else:
                     result = response
                     next = False
-                next = bool(response['next'])
-                url = response['next']
+                next = bool(response["next"])
+                url = response["next"]
             return result
 
     def add(self, _subject, **data) -> dict:
@@ -57,7 +57,7 @@ class Database:
         >>> data = {'name':..}; db.add(subject=db.HOLIDAYS, **data)
         >>> db.add(subject=db.HOLIDAYS,name='..',..)
         """
-        url = f'{self.URL}/{_subject}/'
+        url = f"{self.URL}/{_subject}/"
         response = self.session.post(url, data=data, allow_redirects=False)
 
         try:
@@ -67,8 +67,7 @@ class Database:
         return response
 
     def edit_put(self, subject, object, **data) -> dict:
-        """For operations with ManyToMany, as patch cannot set None for them
-        """
+        """For operations with ManyToMany, as patch cannot set None for them"""
         for key, value in data.items():
             object[key] = value
         url = f'{self.URL}/{subject}/{object["id"]}/'
@@ -90,7 +89,7 @@ class Database:
         >>> db.edit_patch(db.HOLIDAYS, id, **data)
 
         """
-        url = f'{self.URL}/{subject}/{id}/'
+        url = f"{self.URL}/{subject}/{id}/"
         response = self.session.patch(url, data=data)
         if response.status_code == 403:
             raise PermissionError
@@ -98,10 +97,10 @@ class Database:
         return response
 
     def delete(self, subject, id, raise_error=True) -> dict:
-        """ Delete entity
+        """Delete entity
         >>> db.delete(db.HOLIDAYS, id)
         """
-        url = f'{self.URL}/{subject}/{id}/'
+        url = f"{self.URL}/{subject}/{id}/"
         response = self.session.delete(url)
         if response.status_code == 403 and raise_error:
             raise PermissionError
@@ -110,29 +109,29 @@ class Database:
     def filter(self, _subject, return_list=False, **conditions) -> list[dict] | dict:
         """usage:
         >>> db.filter(db.HOLIDAYS,phone_number='+77479309084')"""
-        url = f'{self.URL}/{_subject}/?'
+        url = f"{self.URL}/{_subject}/?"
         for field, value in conditions.items():
-            value = str(value).replace('+', r'%2B')
-            url += f'{field}={value}&'
+            value = str(value).replace("+", r"%2B")
+            url += f"{field}={value}&"
         response = self.session.get(url)
         if response.status_code == 403:
             raise PermissionError
-        if 'Select a valid choice' in str(response.json()):
+        if "Select a valid choice" in str(response.json()):
             return []
-        result = response.json()['results']
+        result = response.json()["results"]
         if len(result) == 1 and not return_list:
-            return response.json()['results'][0]
+            return response.json()["results"][0]
         else:
-            return response.json()['results']
+            return response.json()["results"]
 
-    def get_page(self, subject, page='1', **arg):
+    def get_page(self, subject, page="1", **arg):
         """usage:
         >>> db.get_page(db.HOLIDAYS, page=2)
         >>> db.get_page(db.HOLIDAYS, page=2, name='abc')
         """
-        url = f'{self.URL}/{subject}/?page={page}'
+        url = f"{self.URL}/{subject}/?page={page}"
         for key, value in arg.items():
-            url += f'&{key}={value}'
+            url += f"&{key}={value}"
         response = self.session.get(url)
         if response.status_code == 403:
             raise PermissionError
@@ -140,8 +139,8 @@ class Database:
 
 
 class Data:
-    def __init__(self, db: Database, update_subject = '') -> None:
-        self.file_path = os.path.join(os.getcwd(), 'app', 'data', 'data.json')
+    def __init__(self, db: Database, update_subject="") -> None:
+        self.file_path = os.path.join(os.getcwd(), "app", "data", "data.json")
         self.db = db
         try:
             if not update_subject:
@@ -158,11 +157,11 @@ class Data:
 
     def load_data(self) -> None:
         try:
-            with open(self.file_path, 'r', encoding='utf-8') as file:
+            with open(self.file_path, "r", encoding="utf-8") as file:
                 data = json.load(file)
-                self.holidays = data.get('holidays', {})
-                self.recipes = data.get('recipes', {})
-                self.projects = data.get('projects', {})
+                self.holidays = data.get("holidays", {})
+                self.recipes = data.get("recipes", {})
+                self.projects = data.get("projects", {})
         except FileNotFoundError:
             logging.info("🔵Local data is not available, considering empty...")
             self.holidays = {}
@@ -171,23 +170,23 @@ class Data:
 
     def save_data(self) -> None:
         data = {
-            'holidays': self.holidays,
-            'recipes': self.recipes,
-            'projects': self.projects
+            "holidays": self.holidays,
+            "recipes": self.recipes,
+            "projects": self.projects,
         }
-        with open(self.file_path, 'w', encoding='utf-8') as file:
+        with open(self.file_path, "w", encoding="utf-8") as file:
             json.dump(data, file)
 
     def update(self, update_subject):
-        self.__init__(self.db, update_subject = update_subject)
+        self.__init__(self.db, update_subject=update_subject)
         self.save_data()
         return self
 
-    async def update_async(self, update_subject = '', seconds: int = 2):
-        """ update data after getting webhook
-            This ensures getting new data considering how Database works"""
+    async def update_async(self, update_subject="", seconds: int = 2):
+        """update data after getting webhook
+        This ensures getting new data considering how Database works"""
         await asyncio.sleep(seconds)
-        return self.update(update_subject = update_subject)
+        return self.update(update_subject=update_subject)
 
     def recipe(self, id):
         return json_get_by_id(self.recipes, id)

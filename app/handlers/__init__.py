@@ -8,5 +8,10 @@ from .projects import projects_router
 from .recipes import recipes_router
 
 routers = [
-    apply_router, base_router, holidays_router, menu_router, projects_router, recipes_router
+    apply_router,
+    base_router,
+    holidays_router,
+    menu_router,
+    projects_router,
+    recipes_router,
 ]

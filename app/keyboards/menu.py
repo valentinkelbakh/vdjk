@@ -6,7 +6,7 @@ from app.loader import _
 
 
 def get_back_btn(back_to):
-    text = _('Назад')
+    text = _("Назад")
     if back_to == Menu.MAIN:
         callback_data = BaseCallback(option=Menu.MAIN, page=1)
     elif back_to == Menu.RECIPES:
@@ -18,14 +18,30 @@ def get_back_btn(back_to):
 
 def get_main_menu():
     keyboard = [
-        [InlineKeyboardButton(text=_('Праздники этнических немцев'),
-                              callback_data=BaseCallback(option=Menu.HOLIDAYS, page=1).pack())],
-        [InlineKeyboardButton(text=_('Традиционные немецкие блюда'),
-                              callback_data=BaseCallback(option=Menu.RECIPES, page=1).pack())],
-        [InlineKeyboardButton(text=_('Про СНМК'),
-                              callback_data=BaseCallback(option=Menu.APPLY, page=1).pack())],
-        [InlineKeyboardButton(text=_('Предстоящие проекты'),
-                              callback_data=BaseCallback(option=Menu.PROJECTS, page=1).pack())]
+        [
+            InlineKeyboardButton(
+                text=_("Праздники этнических немцев"),
+                callback_data=BaseCallback(option=Menu.HOLIDAYS, page=1).pack(),
+            )
+        ],
+        [
+            InlineKeyboardButton(
+                text=_("Традиционные немецкие блюда"),
+                callback_data=BaseCallback(option=Menu.RECIPES, page=1).pack(),
+            )
+        ],
+        [
+            InlineKeyboardButton(
+                text=_("Про СНМК"),
+                callback_data=BaseCallback(option=Menu.APPLY, page=1).pack(),
+            )
+        ],
+        [
+            InlineKeyboardButton(
+                text=_("Предстоящие проекты"),
+                callback_data=BaseCallback(option=Menu.PROJECTS, page=1).pack(),
+            )
+        ],
     ]
     reply_markup = InlineKeyboardMarkup(inline_keyboard=keyboard)
     return reply_markup
@@ -33,6 +49,6 @@ def get_main_menu():
 
 def get_close_btn():
     button = InlineKeyboardButton(
-        text=_('Закрыть'),
-        callback_data=BaseCallback(option=Menu.DELETE, page=1).pack())
+        text=_("Закрыть"), callback_data=BaseCallback(option=Menu.DELETE, page=1).pack()
+    )
     return button
