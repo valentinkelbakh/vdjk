@@ -21,8 +21,8 @@ def start_webhook(url):
                                  json=payload,
                                  auth=(API_LOGIN, API_PASSWORD)
                                  )
-    except:
-        logging.error(f'⭕ Webhook not set {response} ⭕')
+    except BaseException as error:
+        logging.error(f"⭕ Webhook not set {error} ⭕")
     if response and response.status_code == 200:
         logging.info(f'🔵 URL for webhook set')
     else:
