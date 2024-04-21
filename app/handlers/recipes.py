@@ -19,7 +19,7 @@ async def handleRecipes(update: types.CallbackQuery | types.Message, state: FSMC
     text = _("Традиционные немецкие блюда:")
     builder = InlineKeyboardBuilder()
     builder.add(kb.menu.get_back_btn(Menu.MAIN))
-    for each in data.recipes:
+    for each in data.get_recipes():
         builder.button(
             text=trim_for_button(each["name"]),
             callback_data=ExtendedCallback(
@@ -45,7 +45,7 @@ async def handleRecipe(
     callback_data: ExtendedCallback,
     state: FSMContext,
 ):
-    recipe = data.recipe(int(callback_data.data))
+    recipe = data.get_recipe(int(callback_data.data))
     if not recipe:
         return await callback_query.answer(_("Информация недоступна"))
     text = _("{recipe[name]}\n\n{recipe[description]}").format(recipe=recipe)

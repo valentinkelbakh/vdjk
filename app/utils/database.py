@@ -5,6 +5,7 @@ import os
 
 from requests import Session
 
+from app.utils.config import DB_WEBHOOK
 from app.utils.tools import json_get_by_id
 
 
@@ -13,10 +14,6 @@ class Database:
         self.URL = url
         self.session = Session()
         self.session.auth = (login, password)
-        self.HOLIDAYS = "holidays"
-        self.PROJECTS = "projects"
-        self.RECIPES = "recipes"
-        self.SUBJECTS = [self.HOLIDAYS, self.PROJECTS, self.RECIPES]
 
     def get(self, subject: str, id: int = "") -> dict | list[dict]:
         """
@@ -26,9 +23,9 @@ class Database:
         Get entity by id:
         >>> db.get(db.HOLIDAYS,data['id'])
         """
-        url = f"{self.URL}/{subject}"
         if id or subject in ["actions", "subjects"]:
-            url += f"/{id}"
+        url = f"{self.URL}/{subject}/"
+            url += f"{id}/"
             response = self.session.get(url)
             if response.status_code == 404:
                 return []
@@ -139,60 +136,82 @@ class Database:
 
 
 class Data:
-    def __init__(self, db: Database, update_subject="") -> None:
-        self.file_path = os.path.join(os.getcwd(), "app", "data", "data.json")
+    HOLIDAYS = "holidays"
+    PROJECTS = "projects"
+    RECIPES = "recipes"
+    SUBJECTS = [HOLIDAYS, PROJECTS, RECIPES]
+
+    def __init__(self, db: Database) -> None:
+        self.__file_path = os.path.join(os.getcwd(), "app", "data", "data.json")
         self.db = db
-        try:
-            if not update_subject:
-                self.holidays = db.get(db.HOLIDAYS)
-                self.recipes = db.get(db.RECIPES)
-                self.projects = db.get(db.PROJECTS)
-            elif update_subject in db.SUBJECTS:
-                setattr(self, update_subject, db.get(update_subject))
-            else:
-                logging.error(f'⭕Unknown subject "{update_subject}"⭕')
-        except Exception as e:
-            logging.info("🔵Database is not available, loading local data...")
-            self.load_data()
+        if DB_WEBHOOK:
+            self._holidays: list = []
+            self._recipes: list = []
+            self._projects: list = []
+            self.get_holidays = lambda: self._holidays
+            self.get_recipes = lambda: self._recipes
+            self.get_projects = lambda: self._projects
+            self.get_holiday = lambda id: json_get_by_id(self._holidays, id)
+            self.get_recipe = lambda id: json_get_by_id(self._recipes, id)
+            self.get_project = lambda id: json_get_by_id(self._projects, id)
+        else:
+            self.get_holidays = lambda: db.get(self.HOLIDAYS)
+            self.get_recipes = lambda: db.get(self.RECIPES)
+            self.get_projects = lambda: db.get(self.PROJECTS)
+            self.get_holiday = lambda id: db.get(self.HOLIDAYS, id)
+            self.get_recipe = lambda id: db.get(self.RECIPES, id)
+            self.get_project = lambda id: db.get(self.PROJECTS, id)
 
-    def load_data(self) -> None:
+    def __load_data(self) -> None:
         try:
-            with open(self.file_path, "r", encoding="utf-8") as file:
-                data = json.load(file)
-                self.holidays = data.get("holidays", {})
-                self.recipes = data.get("recipes", {})
-                self.projects = data.get("projects", {})
+            with open(self.__file_path, "r", encoding="utf-8") as file:
+                data: dict = json.load(file)
+                self._holidays = data.get("holidays", {})
+                self._recipes = data.get("recipes", {})
+                self._projects = data.get("projects", {})
+                return
         except FileNotFoundError:
-            logging.info("🔵Local data is not available, considering empty...")
-            self.holidays = {}
-            self.recipes = {}
-            self.projects = {}
+            logging.error("⭕Local data is not available, considering empty...⭕")
+        except Exception as e:
+            logging.error(f"⭕Error while loading data: {e}⭕")
+        # code below executes only if (any) exception occured
+        self._holidays = {}
+        self._recipes = {}
+        self._projects = {}
 
-    def save_data(self) -> None:
+    def __save_data(self) -> None:
         data = {
-            "holidays": self.holidays,
-            "recipes": self.recipes,
-            "projects": self.projects,
+            "holidays": self._holidays,
+            "recipes": self._recipes,
+            "projects": self._projects,
         }
-        with open(self.file_path, "w", encoding="utf-8") as file:
+        with open(self.__file_path, "w", encoding="utf-8") as file:
             json.dump(data, file)
 
-    def update(self, update_subject):
-        self.__init__(self.db, update_subject=update_subject)
-        self.save_data()
-        return self
-
     async def update_async(self, update_subject="", seconds: int = 2):
-        """update data after getting webhook
-        This ensures getting new data considering how Database works"""
+        """retrieves data from database and saves it to file
+        if database is not available and all data is empty, tries to load from file"""
+        logging.info("🔵 Retrieving data from database..")
+
+        # This ensures getting new data considering how Database works
         await asyncio.sleep(seconds)
-        return self.update(update_subject=update_subject)
 
-    def recipe(self, id):
-        return json_get_by_id(self.recipes, id)
-
-    def holiday(self, id):
-        return json_get_by_id(self.holidays, id)
-
-    def project(self, id):
-        return json_get_by_id(self.projects, id)
+        if update_subject:
+            if update_subject in self.SUBJECTS:
+                try:
+                    data = self.db.get(update_subject)
+                except Exception as e:
+                    logging.error("⭕Database is not available" + "\n⭕ Error: {e} ⭕")
+                setattr(self, "_" + update_subject, data)
+            else:
+                logging.error(f'⭕Unknown subject "{update_subject}"⭕')
+        else:
+            try:
+                self._holidays = self.db.get(self.HOLIDAYS)
+                self._recipes = self.db.get(self.RECIPES)
+                self._projects = self.db.get(self.PROJECTS)
+            except Exception as e:
+                logging.error("⭕Database is not available" + "\n⭕ Error: {e} ⭕")
+                if not any((self._holidays, self._recipes, self._projects)):
+                    self.__load_data()
+        self.__save_data()

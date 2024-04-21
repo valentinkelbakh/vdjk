@@ -22,7 +22,7 @@ async def handleHolidays(
     text = _("Немецкие праздники:")
     builder = InlineKeyboardBuilder()
     builder.add(kb.menu.get_back_btn(Menu.MAIN))
-    for each in data.holidays:
+    for each in data.get_holidays():
         builder.add(
             InlineKeyboardButton(
                 text=trim_for_button(each["name"]),
@@ -54,7 +54,7 @@ async def handleHoliday(
     callback_data: ExtendedCallback,
     state: FSMContext,
 ):
-    holiday = data.holiday(int(callback_data.data))
+    holiday = data.get_holiday(int(callback_data.data))
     if not holiday:
         return await callback_query.answer(_("Информация недоступна"))
     text = _("{holiday[name]}\n\n{holiday[description]}").format(holiday=holiday)

@@ -21,7 +21,7 @@ async def handleProjects(
     text = _("Предстоящие проекты СНМК:")
     builder = InlineKeyboardBuilder()
     builder.add(kb.menu.get_back_btn(Menu.MAIN))
-    for each in data.projects:
+    for each in data.get_projects():
         builder.add(
             InlineKeyboardButton(
                 text=trim_for_button(each["name"]),
@@ -49,7 +49,7 @@ async def handleProject(
     callback_data: ExtendedCallback,
     state: FSMContext,
 ):
-    project = data.project(int(callback_data.data))
+    project = data.get_project(int(callback_data.data))
     if not project:
         return await callback_query.answer("Информация недоступна")
     text = _("{project[name]}\n{project[description]}\n").format(project=project)
