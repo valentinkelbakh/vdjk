@@ -1,4 +1,3 @@
-import asyncio
 import logging
 from contextlib import asynccontextmanager
 
@@ -26,13 +25,10 @@ app = FastAPI(docs_url=None, redoc_url=None, openapi_url=None, lifespan=lifespan
 
 
 @app.post("/webhook-endpoint")
-async def webhook_endpoint(request: Request, background_tasks: BackgroundTasks):
-    global data
-    _data = await request.json()
-    if _data["webhook_pass"] == DB_WEBHOOK_PASS:
-        background_tasks.add_task(
-            data.update_async, update_subject=_data["update_subject"]
-        )
+async def webhook_endpoint(request: Request):
+    response = await request.json()
+    if response["webhook_pass"] == DB_WEBHOOK_PASS:
+        loop.create_task(data.update_async, response["update_subject"])
         return Response(status_code=200, content="Webhook received")
     return HTTPException(status_code=403)
 
