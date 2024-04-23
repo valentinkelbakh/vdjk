@@ -15,7 +15,8 @@ from app.utils.web import start_ngrok, start_webhook
 async def lifespan(app: FastAPI):
     loop.create_task(bot.bot_register())
     ngrok_url = await run_in_threadpool(start_ngrok)
-    await run_in_threadpool(start_webhook, ngrok_url)
+    if ngrok_url:
+        await run_in_threadpool(start_webhook, ngrok_url)
     await data.update_async()
     yield
     await bot.dp.stop_polling()
