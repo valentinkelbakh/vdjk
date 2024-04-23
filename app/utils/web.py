@@ -28,6 +28,10 @@ def start_webhook(url):
 def start_ngrok() -> str:
     ngrok_logger = logging.getLogger("pyngrok")
     ngrok_logger.setLevel(logging.WARNING)
-    ngrok_connect = ngrok.connect(8080)
-    logging.info(f"🔵Public URL: {ngrok_connect.public_url}")
+    try:
+        ngrok_connect = ngrok.connect(8080)
+    except BaseException as error:
+        logging.error(f"⭕ Ngrok not started: \n{error} ⭕")
+        return ""
+    logging.info(f"🔵 Ngrok public URL: {ngrok_connect.public_url}")
     return ngrok_connect.public_url
