@@ -8,6 +8,11 @@ from requests import Session
 from app.utils.config import DB_WEBHOOK
 from app.utils.tools import json_get_by_id
 
+HOLIDAYS = "holidays"
+PROJECTS = "projects"
+RECIPES = "recipes"
+SUBJECTS = [HOLIDAYS, PROJECTS, RECIPES]
+
 
 class Database:
     def __init__(self, url: str, login: str, password: str):
@@ -15,44 +20,44 @@ class Database:
         self.session = Session()
         self.session.auth = (login, password)
 
-    def get(self, subject: str, id: int = "") -> dict | list[dict]:
+    def get(self, subject: str, id: int = 0) -> dict | list[dict]:
         """
         Get all entities by subject:
-        >>> db.get(db.HOLIDAYS)
+        >>> db.get(HOLIDAYS)
 
         Get entity by id:
-        >>> db.get(db.HOLIDAYS,data['id'])
+        >>> db.get(HOLIDAYS,data['id'])
         """
         url = f"{self.URL}/{subject}/"
         if id:
             url += f"{id}/"
-            response = self.session.get(url)
+            response: dict = self.session.get(url)
             if response.status_code == 404:
                 return []
             if response.status_code == 403:
                 raise PermissionError
             return response.json()
         else:
-            result = []
+            result: list[dict] = []
             next = True
             while next:
                 response = self.session.get(url)
                 if response.status_code == 403:
                     raise PermissionError
-                response = response.json()
-                if "results" in response.keys():
-                    result = result + response["results"]
+                data = response.json()
+                if "results" in data.keys():
+                    result = result + data["results"]
                 else:
-                    result = response
+                    result = data
                     next = False
-                next = bool(response["next"])
-                url = response["next"]
+                next = bool(data["next"])
+                url = data["next"]
             return result
 
     def add(self, _subject, **data) -> dict:
         """usage examples:
-        >>> data = {'name':..}; db.add(subject=db.HOLIDAYS, **data)
-        >>> db.add(subject=db.HOLIDAYS,name='..',..)
+        >>> data = {'name':..}; db.add(subject=HOLIDAYS, **data)
+        >>> db.add(subject=HOLIDAYS,name='..',..)
         """
         url = f"{self.URL}/{_subject}/"
         response = self.session.post(url, data=data, allow_redirects=False)
@@ -78,12 +83,12 @@ class Database:
         """For anything except ManyToMany.
 
         Examples:
-        >>> db.edit_patch(db.HOLIDAYS, id, name = "abc"..)
+        >>> db.edit_patch(HOLIDAYS, id, name = "abc"..)
 
         or
         >>> data = {name: "abc"..}
 
-        >>> db.edit_patch(db.HOLIDAYS, id, **data)
+        >>> db.edit_patch(HOLIDAYS, id, **data)
 
         """
         url = f"{self.URL}/{subject}/{id}/"
@@ -95,7 +100,7 @@ class Database:
 
     def delete(self, subject, id, raise_error=True) -> dict:
         """Delete entity
-        >>> db.delete(db.HOLIDAYS, id)
+        >>> db.delete(HOLIDAYS, id)
         """
         url = f"{self.URL}/{subject}/{id}/"
         response = self.session.delete(url)
@@ -105,7 +110,7 @@ class Database:
 
     def filter(self, _subject, return_list=False, **conditions) -> list[dict] | dict:
         """usage:
-        >>> db.filter(db.HOLIDAYS,phone_number='+77479309084')"""
+        >>> db.filter(HOLIDAYS,phone_number='+49123456789')"""
         url = f"{self.URL}/{_subject}/?"
         for field, value in conditions.items():
             value = str(value).replace("+", r"%2B")
@@ -123,8 +128,8 @@ class Database:
 
     def get_page(self, subject, page="1", **arg):
         """usage:
-        >>> db.get_page(db.HOLIDAYS, page=2)
-        >>> db.get_page(db.HOLIDAYS, page=2, name='abc')
+        >>> db.get_page(HOLIDAYS, page=2)
+        >>> db.get_page(HOLIDAYS, page=2, name='abc')
         """
         url = f"{self.URL}/{subject}/?page={page}"
         for key, value in arg.items():
@@ -136,11 +141,6 @@ class Database:
 
 
 class Data:
-    HOLIDAYS = "holidays"
-    PROJECTS = "projects"
-    RECIPES = "recipes"
-    SUBJECTS = [HOLIDAYS, PROJECTS, RECIPES]
-
     def __init__(self, db: Database) -> None:
         self.__file_path = os.path.join(os.getcwd(), "app", "data", "data.json")
         self.db = db
