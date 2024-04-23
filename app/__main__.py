@@ -1,5 +1,3 @@
-import asyncio
-
 from app.bot import bot_register
 from app.loader import loop, server
 from app.utils.config import DB_WEBHOOK
